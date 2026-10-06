@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#fff8ef">
+  <title>Angličtina s Terezkou a Matýskem</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <button class="brand" id="homeBtn" aria-label="Domů">🇬🇧 <span>Angličtina s Terezkou a Matýskem</span></button>
+    <div class="topstats">
+      <span id="stars">⭐ 0</span>
+      <span id="mastered">🏅 0</span>
+    </div>
+  </header>
+
+  <main id="app" class="app" aria-live="polite"></main>
+
+  <template id="homeTemplate">
+    <section class="hero">
+      <div>
+        <p class="eyebrow">ANGLIČTINA PRO MLADŠÍ ŠKOLÁKY</p>
+        <h1>Učím se. Rozumím. Mluvím.</h1>
+        <p>Žádné bloudění mezi tlačítky. Vyber téma a projdi cestu od prvního slova až k vlastnímu mluvení.</p>
+      </div>
+      <div class="characters" aria-hidden="true">
+        <div class="character ter">T</div>
+        <div class="character mat">M</div>
+      </div>
+    </section>
+
+    <section class="world-card">
+      <div>
+        <h2>🌍 Náš svět</h2>
+        <p id="worldText">Každé opravdu zvládnuté téma svět trochu oživí.</p>
+      </div>
+      <div class="world-progress"><span id="worldFill"></span></div>
+    </section>
+
+    <section>
+      <h2 class="section-title">Vyber si téma</h2>
+      <div id="topics" class="topics"></div>
+    </section>
+  </template>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
