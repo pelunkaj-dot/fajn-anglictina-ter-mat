@@ -91,7 +91,9 @@ recordPronunciation = async function(expected){
     const duration=Math.min(5200,Math.max(3000,expected.split(/\s+/).length*650));
     setTimeout(()=>{if(recorder.state==="recording")recorder.stop();},duration);
   }catch(err){
-    out.innerHTML='<div class="kid-feedback try">🎙️ Potřebuji povolit mikrofon.</div>';
+    out.innerHTML='<div class="kid-feedback try"><div class="feedback-face">🎙️</div><strong>Mikrofon není dostupný.</strong><span>Můžeš pokračovat a mluvení zkusit později.</span><div class="controls"><button class="btn primary" id="continueNoMic">Pokračovat →</button></div></div>';
+    const next=document.getElementById("continueNoMic");
+    if(next) next.onclick=()=>{if(currentIndex<currentTopic.sentences.length-1){currentIndex++;renderSpeak();}else nextStage();};
   }
 };
 
