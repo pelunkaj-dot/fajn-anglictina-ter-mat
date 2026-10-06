@@ -13,7 +13,7 @@ function initWorldMap(){
   document.querySelectorAll(".world-place").forEach(place=>{
     const id=place.dataset.topic;
     const ts=topicState(id);
-    const unlocked=Boolean(ts.mastered);
+    const unlocked=Boolean(ts.stages?.every(Boolean));
     place.classList.toggle("is-unlocked",unlocked);
     place.classList.toggle("is-locked",!unlocked);
     place.setAttribute("aria-disabled",String(!unlocked));
