@@ -46,3 +46,6 @@ function startAdventureFor(topicId){
   game={round:0,score:0,combo:0,bestCombo:0,questions:buildGameQuestions(topic),topic};
   renderAdventure();
 }
+
+
+homeBtn.addEventListener("click",()=>setTimeout(initWorldMap,0));
