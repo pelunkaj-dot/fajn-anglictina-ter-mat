@@ -269,3 +269,33 @@ button,input{font:inherit}.topbar{position:sticky;top:0;z-index:10;display:flex;
   .place-weather{left:67%;top:11%}.place-weather .place-icon{font-size:36px}
   .place-transport{left:23%;bottom:5px}.place-emotions{left:67%;bottom:5px}
 }
+
+/* Finální UX pro nejmenší */
+.sentence-visual{display:grid;place-items:center;min-height:150px;margin:0 auto 8px}
+.sentence-cz{text-align:center;color:var(--muted);font-size:18px;margin:0 0 8px}
+.quiz-progress{text-align:center;font-weight:900;color:var(--muted);margin-bottom:6px}
+.quiz-main-visual{display:grid;place-items:center;margin:4px auto 10px}
+.quiz-question{text-align:center;font-size:clamp(20px,4vw,30px);margin:8px 0 14px}
+.quiz-colour{width:170px;height:170px;border-radius:50%;display:grid;place-items:center;font-size:72px;box-shadow:0 14px 28px #0002,inset 0 0 0 8px #ffffff33}
+.mini-colour{width:80px;height:80px;border-radius:18px;display:grid;place-items:center;font-size:38px;box-shadow:inset 0 0 0 4px #ffffff44}
+.quiz-picture{width:min(320px,80vw)}
+.quiz-picture img{width:100%;display:block;border-radius:22px}
+.mini-quiz-picture{width:90px}
+.mini-quiz-picture img{width:90px;height:68px;object-fit:cover;border-radius:14px}
+.quiz-picture-options{grid-template-columns:repeat(2,minmax(145px,1fr))}
+.quiz-picture-option{grid-template-columns:1fr;justify-items:center;text-align:center;min-height:126px}
+.quiz-word-option{font-size:19px;padding:16px}
+.quiz-result-visual{text-align:center;font-size:80px}
+.quiz-result-text{text-align:center;font-size:18px;color:var(--muted)}
+.finish-characters{display:flex;justify-content:center;align-items:flex-end;margin-bottom:8px}
+.finish-characters img{width:92px;height:92px;border-radius:50%;background:#fff;border:5px solid #fff;box-shadow:0 8px 20px #0002}
+.finish-characters img+img{margin-left:-12px;transform:translateY(14px)}
+.finish-title{text-align:center}
+.finish-copy{text-align:center;font-size:18px;max-width:650px;margin:8px auto 0;color:var(--muted)}
+.speaker-photo{width:38px;height:38px;border-radius:50%;background:#fff;border:2px solid #fff;box-shadow:0 3px 8px #0002}
+@media(max-width:560px){
+  .sentence-visual{min-height:120px}
+  .quiz-picture-options{grid-template-columns:1fr 1fr}
+  .quiz-colour{width:130px;height:130px;font-size:58px}
+  .mini-colour{width:68px;height:68px}
+}
