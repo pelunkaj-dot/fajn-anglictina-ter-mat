@@ -61,21 +61,21 @@ function renderHome(){
       <div class="emoji">${topic.emoji}</div>
       <h3>${esc(topic.title)}</h3>
       <p>${esc(topic.cz)}</p>
-      <div class="status">${ts.mastered ? "🏅 Umím" : done ? `⭐ ${done}/5 kroků` : "Začít"}</div>`;
+      <div class="status">${ts.mastered ? "🏅 Umím" : done===5 ? "✅ Prošel/a" : done ? `⭐ ${done}/5 kroků` : "Začít"}</div>`;
     card.addEventListener("click",()=>openTopic(topic.id));
     topics.appendChild(card);
   }
-  const mastered=Object.values(state.topics).filter(t=>t.mastered).length;
-  const percent=Math.round((mastered/FAJN_DATA.topics.length)*100);
+  const completedTopics=FAJN_DATA.topics.filter(t=>topicState(t.id).stages.every(Boolean));
+  const percent=Math.round((completedTopics.length/FAJN_DATA.topics.length)*100);
   document.getElementById("worldFill").style.width=percent+"%";
-  document.getElementById("worldText").textContent = mastered
-    ? `Zvládnutá témata: ${mastered}. Svět se probouzí – a teprve začínáme.`
-    : "Každé opravdu zvládnuté téma svět trochu oživí.";
+  document.getElementById("worldText").textContent = completedTopics.length
+    ? `Dokončená témata: ${completedTopics.length}. Každé z nich otevřelo nové místo ve světě.`
+    : "Každé dokončené téma otevře nové místo ve světě.";
   const scene=document.getElementById("worldScene");
   scene.className="world-scene";
-  const masteredIds=FAJN_DATA.topics.filter(t=>topicState(t.id).mastered).map(t=>t.id);
-  masteredIds.forEach(id=>scene.classList.add("has-"+id));
-  if(masteredIds.length===0) scene.classList.add("level-0");
+  const completedIds=completedTopics.map(t=>t.id);
+  completedIds.forEach(id=>scene.classList.add("has-"+id));
+  if(completedIds.length===0) scene.classList.add("level-0");
   document.getElementById("gameBtn").onclick=startAdventure;
   document.getElementById("adventureBtn").onclick=startAdventure;
   refreshStats();
