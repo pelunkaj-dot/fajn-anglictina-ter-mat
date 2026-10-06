@@ -35,7 +35,7 @@ renderStory = function(){
       ${currentTopic.story.map((line,i)=>`
         <article class="comic-card ${line.speaker==="Terezka"?"terezka-card":"matysek-card"}">
           <div class="comic-picture">${storyScene(currentTopic,line)}</div>
-          <div class="comic-speaker"><span class="speaker-avatar">${line.speaker==="Terezka"?"T":"M"}</span><strong>${esc(line.speaker)}</strong></div>
+          <div class="comic-speaker"><img class="speaker-photo" src="${line.speaker==="Terezka"?"assets/characters/terezka.svg":"assets/characters/matysek.svg"}" alt="${esc(line.speaker)}"><strong>${esc(line.speaker)}</strong></div>
           <div class="speech-bubble">
             <div class="story-en">${esc(line.en)}</div>
             <div class="story-cz">${esc(line.cz)}</div>
