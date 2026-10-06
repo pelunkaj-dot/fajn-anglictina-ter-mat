@@ -28,7 +28,7 @@ function initWorldMap(){
         if(learn) learn.onclick=()=>openTopic(id);
         return;
       }
-      tip.innerHTML=`<div class="world-tip-card"><span>🔒</span><strong>${esc(topic?.cz||"Téma")}</strong><small>Nejdřív toto téma zvládni.</small><button id="goLearnLocked">Jdu se učit →</button></div>`;
+      tip.innerHTML=`<div class="world-tip-card"><span>🔒</span><strong>${esc(topic?.cz||"Téma")}</strong><small>Nejdřív toto téma dokonči.</small><button id="goLearnLocked">Jdu se učit →</button></div>`;
       tip.classList.add("show");
       const go=document.getElementById("goLearnLocked");
       if(go) go.onclick=()=>openTopic(id);
