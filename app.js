@@ -72,7 +72,10 @@ function renderHome(){
     ? `Zvládnutá témata: ${mastered}. Svět se probouzí – a teprve začínáme.`
     : "Každé opravdu zvládnuté téma svět trochu oživí.";
   const scene=document.getElementById("worldScene");
-  scene.className="world-scene level-"+Math.min(mastered,3);
+  scene.className="world-scene";
+  const masteredIds=FAJN_DATA.topics.filter(t=>topicState(t.id).mastered).map(t=>t.id);
+  masteredIds.forEach(id=>scene.classList.add("has-"+id));
+  if(masteredIds.length===0) scene.classList.add("level-0");
   document.getElementById("gameBtn").onclick=startAdventure;
   document.getElementById("adventureBtn").onclick=startAdventure;
   refreshStats();
