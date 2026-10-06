@@ -152,6 +152,57 @@ window.FAJN_DATA = {
         {speaker:"Terezka",en:"Listen! The bell is ringing.",cz:"Poslouchej! Zvonek zvoní."},
         {speaker:"Matýsek",en:"Let us go to class.",cz:"Pojďme do třídy."}
       ]
+    },
+    {
+      id:"weather", title:"Weather", cz:"Počasí", emoji:"⛅",
+      words:[
+        {en:"sun",cz:"slunce",visual:"☀️"},{en:"rain",cz:"déšť",visual:"🌧️"},{en:"snow",cz:"sníh",visual:"❄️"},{en:"cloud",cz:"mrak",visual:"☁️"},
+        {en:"wind",cz:"vítr",visual:"💨"},{en:"rainbow",cz:"duha",visual:"🌈"},{en:"thunder",cz:"bouřka",visual:"⛈️"},{en:"fog",cz:"mlha",visual:"🌫️"}
+      ],
+      sentences:[
+        {en:"The sun is shining.",cz:"Slunce svítí."},{en:"It is raining.",cz:"Prší."},
+        {en:"It is snowing.",cz:"Sněží."},{en:"I can see a rainbow.",cz:"Vidím duhu."}
+      ],
+      story:[
+        {speaker:"Matýsek",en:"Look! The sun is shining.",cz:"Podívej! Slunce svítí."},
+        {speaker:"Terezka",en:"Oh! Now it is raining.",cz:"Jé! Teď prší."},
+        {speaker:"Matýsek",en:"I can see a rainbow!",cz:"Vidím duhu!"},
+        {speaker:"Terezka",en:"What a funny day!",cz:"To je ale legrační den!"}
+      ]
+    },
+    {
+      id:"transport", title:"Transport", cz:"Doprava", emoji:"🚗",
+      words:[
+        {en:"car",cz:"auto",visual:"🚗"},{en:"bus",cz:"autobus",visual:"🚌"},{en:"train",cz:"vlak",visual:"🚂"},{en:"bike",cz:"kolo",visual:"🚲"},
+        {en:"plane",cz:"letadlo",visual:"✈️"},{en:"boat",cz:"loď",visual:"⛵"},{en:"taxi",cz:"taxi",visual:"🚕"},{en:"tram",cz:"tramvaj",visual:"🚃"}
+      ],
+      sentences:[
+        {en:"This is a car.",cz:"Tohle je auto."},{en:"I go by bus.",cz:"Jedu autobusem."},
+        {en:"The train is big.",cz:"Vlak je velký."},{en:"I ride my bike.",cz:"Jedu na kole."}
+      ],
+      story:[
+        {speaker:"Terezka",en:"Let us go by bus!",cz:"Pojďme autobusem!"},
+        {speaker:"Matýsek",en:"Then we can take the train.",cz:"Pak můžeme jet vlakem."},
+        {speaker:"Terezka",en:"Look! A plane!",cz:"Podívej! Letadlo!"},
+        {speaker:"Matýsek",en:"I like travelling.",cz:"Rád cestuji."}
+      ]
+    },
+    {
+      id:"emotions", title:"Emotions", cz:"Pocity", emoji:"😊",
+      words:[
+        {en:"happy",cz:"šťastný",visual:"😄"},{en:"sad",cz:"smutný",visual:"😢"},{en:"angry",cz:"naštvaný",visual:"😠"},{en:"scared",cz:"vystrašený",visual:"😨"},
+        {en:"surprised",cz:"překvapený",visual:"😮"},{en:"tired",cz:"unavený",visual:"😴"},{en:"excited",cz:"nadšený",visual:"🤩"},{en:"bored",cz:"znuděný",visual:"😑"}
+      ],
+      sentences:[
+        {en:"I am happy.",cz:"Jsem šťastný / šťastná."},{en:"I am tired.",cz:"Jsem unavený / unavená."},
+        {en:"She is surprised.",cz:"Je překvapená."},{en:"He is excited.",cz:"Je nadšený."}
+      ],
+      story:[
+        {speaker:"Matýsek",en:"I am sad.",cz:"Jsem smutný."},
+        {speaker:"Terezka",en:"Why are you sad?",cz:"Proč jsi smutný?"},
+        {speaker:"Matýsek",en:"I cannot find my toy.",cz:"Nemůžu najít svou hračku."},
+        {speaker:"Terezka",en:"Here it is! Now you are happy!",cz:"Tady je! Teď už jsi šťastný!"}
+      ]
     }
   ]
 };
