@@ -3,8 +3,8 @@ window.FAJN_DATA = {
     {
       id:"colours", title:"Colours", cz:"Barvy", emoji:"🎨",
       words:[
-        {en:"red",cz:"červená"},{en:"blue",cz:"modrá"},{en:"green",cz:"zelená"},{en:"yellow",cz:"žlutá"},
-        {en:"orange",cz:"oranžová"},{en:"pink",cz:"růžová"},{en:"black",cz:"černá"},{en:"white",cz:"bílá"}
+        {en:"red",cz:"červená",color:"#e53935",visual:"🍎"},{en:"blue",cz:"modrá",color:"#1e88e5",visual:"💧"},{en:"green",cz:"zelená",color:"#43a047",visual:"🍃"},{en:"yellow",cz:"žlutá",color:"#fdd835",visual:"☀️"},
+        {en:"orange",cz:"oranžová",color:"#fb8c00",visual:"🍊"},{en:"pink",cz:"růžová",color:"#ec407a",visual:"🌸"},{en:"black",cz:"černá",color:"#202124",visual:"🐈‍⬛"},{en:"white",cz:"bílá",color:"#ffffff",visual:"☁️"}
       ],
       sentences:[
         {en:"It is red.",cz:"Je to červené."},{en:"My bag is blue.",cz:"Moje taška je modrá."},
