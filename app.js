@@ -71,6 +71,10 @@ function renderHome(){
   document.getElementById("worldText").textContent = mastered
     ? `Zvládnutá témata: ${mastered}. Svět se probouzí – a teprve začínáme.`
     : "Každé opravdu zvládnuté téma svět trochu oživí.";
+  const scene=document.getElementById("worldScene");
+  scene.className="world-scene level-"+Math.min(mastered,3);
+  document.getElementById("gameBtn").onclick=startAdventure;
+  document.getElementById("adventureBtn").onclick=startAdventure;
   refreshStats();
 }
 
@@ -319,3 +323,119 @@ function shuffle(a){
   return a;
 }
 renderHome();
+
+let game={round:0,score:0,combo:0,bestCombo:0,questions:[],topic:null};
+
+function startAdventure(){
+  const unlocked=FAJN_DATA.topics.filter(t=>topicState(t.id).stages.some(Boolean));
+  const pool=unlocked.length ? unlocked : FAJN_DATA.topics.slice(0,1);
+  const topic=pool[Math.floor(Math.random()*pool.length)];
+  game={round:0,score:0,combo:0,bestCombo:0,questions:buildGameQuestions(topic),topic};
+  renderAdventure();
+}
+
+function buildGameQuestions(topic){
+  const qs=[];
+  const words=[...topic.words];
+  shuffle(words);
+  for(let i=0;i<8;i++){
+    const w=words[i%words.length];
+    const mode=i%3;
+    if(mode===0){
+      const opts=[w,...shuffle(topic.words.filter(x=>x!==w)).slice(0,3)];shuffle(opts);
+      qs.push({type:"translate",prompt:`Co znamená „${w.en}“?`,answer:w.cz,options:opts.map(x=>x.cz),speak:w.en});
+    }else if(mode===1){
+      const opts=[w,...shuffle(topic.words.filter(x=>x!==w)).slice(0,3)];shuffle(opts);
+      qs.push({type:"reverse",prompt:`Jak je anglicky „${w.cz}“?`,answer:w.en,options:opts.map(x=>x.en)});
+    }else{
+      const opts=[w,...shuffle(topic.words.filter(x=>x!==w)).slice(0,3)];shuffle(opts);
+      qs.push({type:"listen",prompt:"Co jsi slyšel/a?",answer:w.en,options:opts.map(x=>x.en),speak:w.en});
+    }
+  }
+  return qs;
+}
+
+function renderAdventure(){
+  const q=game.questions[game.round];
+  if(!q){renderAdventureFinish();return;}
+  const progress=(game.round/game.questions.length)*100;
+  app.innerHTML=`
+    <div class="lesson-head">
+      <button class="back" id="leaveGame">← Zpět</button>
+      <div class="lesson-title"><h1>🗺️ Výprava za hvězdami</h1><p>${game.topic.emoji} ${esc(game.topic.title)} · herní režim</p></div>
+    </div>
+    <section class="panel game-panel">
+      <div class="game-hud">
+        <div class="hud-box"><small>Hvězdy</small>⭐ <span id="gScore">${game.score}</span></div>
+        <div class="hud-box"><small>Série</small>🔥 <span id="gCombo">${game.combo}</span></div>
+        <div class="hud-box"><small>Cesta</small>${game.round+1}/${game.questions.length}</div>
+      </div>
+      <div class="adventure-map">
+        <div class="stars-bg"></div><div class="moon">🌙</div><div class="trail"></div>
+        ${game.questions.map((_,i)=>`<div class="checkpoint ${i<game.round?"done":""}" style="left:${8+i*(80/(game.questions.length-1))}%">${i<game.round?"★":""}</div>`).join("")}
+        <div class="hero-token" style="left:${6+progress*.8}%">👧🏻👦🏻</div>
+        <div class="treasure">🎁</div>
+      </div>
+      <div class="game-question">
+        <div class="combo">${game.combo>=2?`🔥 Série ${game.combo}! + bonus`:""}</div>
+        ${q.type==="listen"?'<div class="controls"><button class="btn speak" id="gameListen">🔊 Poslechnout</button></div>':""}
+        <h3>${esc(q.prompt)}</h3>
+        <div class="game-options">${q.options.map(o=>`<button class="game-option" data-a="${esc(o)}">${esc(o)}</button>`).join("")}</div>
+        <div id="gameFeedback"></div>
+      </div>
+    </section>`;
+  document.getElementById("leaveGame").onclick=renderHome;
+  if(document.getElementById("gameListen")) {
+    document.getElementById("gameListen").onclick=()=>speak(q.speak);
+    setTimeout(()=>speak(q.speak),250);
+  }
+  document.querySelectorAll(".game-option").forEach(btn=>btn.onclick=()=>answerGame(btn,q));
+}
+
+function answerGame(btn,q){
+  const all=[...document.querySelectorAll(".game-option")];
+  if(all.some(x=>x.disabled)) return;
+  const ok=btn.dataset.a===q.answer;
+  if(ok){
+    game.combo++;
+    game.bestCombo=Math.max(game.bestCombo,game.combo);
+    const gain=game.combo>=4?3:game.combo>=2?2:1;
+    game.score+=gain;
+    btn.classList.add("correct");
+    document.getElementById("gameFeedback").innerHTML=`<div class="feedback ok">⭐ Správně! ${gain>1?`Bonus za sérii: +${gain}`:""}</div>`;
+    all.forEach(x=>x.disabled=true);
+    setTimeout(()=>{game.round++;renderAdventure();},650);
+  }else{
+    game.combo=0;
+    btn.classList.add("wrong");
+    btn.disabled=true;
+    document.getElementById("gameFeedback").innerHTML='<div class="feedback bad">Tudy cesta nevede. Zkus jinou odpověď.</div>';
+    if(q.speak) speak(q.speak);
+  }
+}
+
+function renderAdventureFinish(){
+  const reward=Math.max(2,Math.round(game.score/3));
+  state.stars=(state.stars||0)+reward;
+  state.games ||= {plays:0,best:0};
+  state.games.plays++;
+  state.games.best=Math.max(state.games.best,game.score);
+  saveState();
+  app.innerHTML=`
+    <section class="panel game-panel">
+      <div class="reward-burst">🎁✨</div>
+      <h1 style="text-align:center">Poklad nalezen!</h1>
+      <p style="text-align:center">Terezka a Matýsek dorazili do cíle. Získáváš <strong>${reward} hvězd</strong> do svého světa.</p>
+      <div class="game-hud">
+        <div class="hud-box"><small>Skóre</small>⭐ ${game.score}</div>
+        <div class="hud-box"><small>Nejlepší série</small>🔥 ${game.bestCombo}</div>
+        <div class="hud-box"><small>Rekord</small>🏆 ${state.games.best}</div>
+      </div>
+      <div class="controls">
+        <button class="btn" id="againGame">Hrát znovu</button>
+        <button class="btn primary" id="backWorld">Do světa →</button>
+      </div>
+    </section>`;
+  document.getElementById("againGame").onclick=startAdventure;
+  document.getElementById("backWorld").onclick=renderHome;
+}
