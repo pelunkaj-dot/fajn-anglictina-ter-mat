@@ -95,12 +95,14 @@ function answerYoungGame(btn,q){
     game.bestCombo=Math.max(game.bestCombo,game.combo);
     const gain=game.combo>=4?3:game.combo>=2?2:1;
     game.score+=gain;
+    kidSound("success");
     btn.classList.add("correct");
     all.forEach(x=>x.disabled=true);
     document.getElementById("gameFeedback").innerHTML=`<div class="feedback ok">⭐ Správně! ${gain>1?`Bonus +${gain}`:""}</div>`;
     setTimeout(()=>{game.round++;renderAdventure();},650);
   }else{
     game.combo=0;
+    kidSound("try");
     btn.classList.add("wrong");
     btn.disabled=true;
     document.getElementById("gameFeedback").innerHTML='<div class="feedback bad">🙂 Zkus jinou možnost.</div>';
@@ -134,10 +136,12 @@ async function recordGameWord(q){
           game.bestCombo=Math.max(game.bestCombo,game.combo);
           const gain=score>=80?3:2;
           game.score+=gain;
+          kidSound(score>=80?"reward":"success");
           out.innerHTML=`<div class="voice-game-result goodvoice"><div>🌟</div><strong>${score>=80?"Paráda!":"Dobré!"}</strong><span>Brána se otevřela.</span></div>`;
           setTimeout(()=>{game.round++;renderAdventure();},900);
         }else{
           game.combo=0;
+          kidSound("try");
           out.innerHTML='<div class="voice-game-result tryvoice"><div>👂</div><strong>Ještě jednou.</strong><span>Poslechni vzor a zkus to znovu.</span></div>';
           speak(q.answer);
           btn.disabled=false;
