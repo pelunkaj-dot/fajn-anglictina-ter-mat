@@ -334,3 +334,37 @@ button,input{font:inherit}.topbar{position:sticky;top:0;z-index:10;display:flex;
 .world-tip-actions button{border:0;border-radius:12px;padding:9px 10px;font-weight:900;cursor:pointer}
 .world-tip-actions button:first-child{background:#5bc26a;color:#fff}
 .world-tip-actions button:last-child{background:#e9f2ff;color:#315f8c}
+
+/* Stabilizace klikací mapy */
+.world-scene{height:330px!important}
+.world-place.is-locked{opacity:.46!important;transform:scale(.82)!important;filter:grayscale(1)}
+.world-place.is-unlocked{opacity:1!important;transform:scale(1)!important}
+.place-colours{left:38%;top:8%}
+.place-weather{left:68%;top:7%}
+.place-school{right:3%;top:29%;bottom:auto}
+.place-animals{left:4%;top:33%;bottom:auto}
+.place-numbers{left:27%;top:36%;bottom:auto}
+.place-body{left:48%;top:34%;bottom:auto}
+.place-family{left:67%;top:36%;right:auto;bottom:auto}
+.place-clothes{right:5%;top:54%;bottom:auto}
+.place-transport{left:10%;bottom:18px}
+.place-food{left:33%;bottom:18px}
+.place-emotions{left:59%;bottom:18px}
+.place-house{right:6%;bottom:12px}
+.world-friends{left:43%;bottom:64px}
+@media(max-width:650px){
+  .world-scene{height:300px!important}
+  .place-colours{left:36%;top:8%}
+  .place-weather{left:66%;top:7%}
+  .place-school{right:1%;top:30%;bottom:auto}
+  .place-animals{left:2%;top:34%;bottom:auto}
+  .place-numbers{left:24%;top:38%;bottom:auto}
+  .place-body{left:46%;top:36%;bottom:auto}
+  .place-family{left:65%;top:38%;right:auto;bottom:auto}
+  .place-clothes{right:2%;top:57%;bottom:auto}
+  .place-transport{left:7%;bottom:14px}
+  .place-food{left:31%;bottom:14px}
+  .place-emotions{left:57%;bottom:14px}
+  .place-house{right:3%;bottom:9px}
+  .world-friends{left:42%;bottom:61px}
+}
