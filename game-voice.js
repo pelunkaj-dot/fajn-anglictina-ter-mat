@@ -148,9 +148,11 @@ async function recordGameWord(q){
           btn.innerHTML="<span>🎙️</span><b>Řeknu to</b>";
         }
       }catch(err){
-        out.innerHTML='<div class="feedback bad">Mikrofon teď zlobí. Můžeš úkol zopakovat.</div>';
+        out.innerHTML='<div class="feedback bad">🎙️ Mikrofon teď zlobí.<div class="controls"><button class="btn" id="skipGameVoice">Pokračovat bez mikrofonu →</button></div></div>';
         btn.disabled=false;
         btn.innerHTML="<span>🎙️</span><b>Řeknu to</b>";
+        const skip=document.getElementById("skipGameVoice");
+        if(skip) skip.onclick=()=>{game.combo=0;game.round++;renderAdventure();};
       }
     };
     recorder.start();
@@ -159,6 +161,8 @@ async function recordGameWord(q){
     out.innerHTML='<div class="feedback">🎙️ Poslouchám tvůj hlas…</div>';
     setTimeout(()=>{ if(recorder.state==="recording") recorder.stop(); },2200);
   }catch(err){
-    out.innerHTML='<div class="feedback bad">🎙️ Potřebuji povolit mikrofon.</div>';
+    out.innerHTML='<div class="feedback bad">🎙️ Mikrofon není dostupný.<div class="controls"><button class="btn" id="skipGameVoice">Pokračovat bez mikrofonu →</button></div></div>';
+    const skip=document.getElementById("skipGameVoice");
+    if(skip) skip.onclick=()=>{game.combo=0;game.round++;renderAdventure();};
   }
 }
