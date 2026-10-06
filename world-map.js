@@ -18,11 +18,16 @@ function initWorldMap(){
     place.classList.toggle("is-locked",!unlocked);
     place.setAttribute("aria-disabled",String(!unlocked));
     place.onclick=()=>{
+      const topic=FAJN_DATA.topics.find(t=>t.id===id);
       if(unlocked){
-        openTopic(id);
+        tip.innerHTML=`<div class="world-tip-card unlocked-tip"><span>${topic?.emoji||"✨"}</span><strong>${esc(topic?.cz||"Téma")}</strong><small>Kam chceš jít?</small><div class="world-tip-actions"><button id="worldPlay">🎮 Zahrát</button><button id="worldLearn">📚 Procvičit</button></div></div>`;
+        tip.classList.add("show");
+        const play=document.getElementById("worldPlay");
+        const learn=document.getElementById("worldLearn");
+        if(play) play.onclick=()=>startAdventureFor(id);
+        if(learn) learn.onclick=()=>openTopic(id);
         return;
       }
-      const topic=FAJN_DATA.topics.find(t=>t.id===id);
       tip.innerHTML=`<div class="world-tip-card"><span>🔒</span><strong>${esc(topic?.cz||"Téma")}</strong><small>Nejdřív toto téma zvládni.</small><button id="goLearnLocked">Jdu se učit →</button></div>`;
       tip.classList.add("show");
       const go=document.getElementById("goLearnLocked");
@@ -34,3 +39,10 @@ function initWorldMap(){
 
 // Pokud byl script načten až po prvním vykreslení, aktivuj mapu hned.
 initWorldMap();
+
+function startAdventureFor(topicId){
+  const topic=FAJN_DATA.topics.find(t=>t.id===topicId);
+  if(!topic) return;
+  game={round:0,score:0,combo:0,bestCombo:0,questions:buildGameQuestions(topic),topic};
+  renderAdventure();
+}
