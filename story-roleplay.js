@@ -77,10 +77,13 @@ async function recordStoryLine(index){
         if(!res.ok)throw new Error(data.error||"Chyba");
         const score=Number(data.score)||0;
         if(score>=80){
+          kidSound("success");
           out.innerHTML='<div class="kid-feedback great"><div class="feedback-face">🌟</div><strong>Skvělá replika!</strong><span>Tohle by Terezka s Matýskem brali.</span></div>';
         }else if(score>=60){
+          kidSound("success");
           out.innerHTML='<div class="kid-feedback good"><div class="feedback-face">🙂</div><strong>Dobré!</strong><span>Zkus ji ještě jednou jako opravdový herec.</span></div>';
         }else{
+          kidSound("try");
           out.innerHTML='<div class="kid-feedback try"><div class="feedback-face">👂</div><strong>Poslechni vzor.</strong><span>A pak repliku zopakuj.</span></div>';
           speak(line.en);
         }
