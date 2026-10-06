@@ -218,3 +218,34 @@ button,input{font:inherit}.topbar{position:sticky;top:0;z-index:10;display:flex;
 .world-scene.has-house .unlock-house,.world-scene.has-clothes .unlock-clothes,.world-scene.has-school .unlock-school{opacity:1;transform:scale(1)}
 .world-clothes{position:absolute;right:9%;bottom:91px;font-size:30px;z-index:2;background:#fff9;border-radius:12px;padding:4px 7px}
 .world-school{position:absolute;right:4%;bottom:38px;font-size:54px;z-index:2}
+
+/* Klikací svět */
+.world-place{position:absolute;border:0;background:transparent;padding:0;display:grid;justify-items:center;gap:2px;z-index:4;cursor:pointer;transition:transform .18s,filter .2s,opacity .2s}
+.world-place .place-icon{display:block;filter:drop-shadow(0 6px 8px #0003)}
+.world-place .place-name{font-size:11px;font-weight:900;background:#fffde8e8;color:#463d35;border:1px solid #ffffffaa;border-radius:999px;padding:3px 7px;box-shadow:0 3px 8px #0002}
+.world-place .place-lock{position:absolute;right:-6px;top:-5px;font-size:18px;filter:drop-shadow(0 2px 4px #0005)}
+.world-place.is-unlocked:hover{transform:translateY(-4px) scale(1.05)}
+.world-place.is-unlocked .place-lock{display:none}
+.world-place.is-locked{filter:grayscale(1);opacity:.42}
+.world-place.is-locked:hover{opacity:.6}
+.place-colours{left:42%;top:13%}.place-colours .place-icon{font-size:58px}
+.place-animals{left:8%;bottom:30px}.place-animals .place-icon{font-size:48px}
+.place-food{left:51%;bottom:30px}.place-food .place-icon{font-size:36px}
+.place-numbers{left:40%;bottom:78px}.place-numbers .place-icon{font-size:25px;font-weight:900;color:#7454be;background:#fff9;border-radius:12px;padding:4px 8px}
+.place-body{left:58%;bottom:85px}.place-body .place-icon{font-size:36px}
+.place-family{right:27%;bottom:79px}.place-family .place-icon{font-size:36px}
+.place-clothes{right:9%;bottom:73px}.place-clothes .place-icon{font-size:31px}
+.place-house{right:12%;bottom:22px}.place-house .place-icon{font-size:64px}
+.place-school{right:1%;bottom:19px}.place-school .place-icon{font-size:54px}
+.world-tip{position:absolute;left:50%;bottom:10px;transform:translate(-50%,20px);opacity:0;pointer-events:none;z-index:10;transition:.2s;width:min(310px,86%)}
+.world-tip.show{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+.world-tip-card{background:#fff;border:2px solid #eadbd0;border-radius:18px;padding:10px 12px;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:8px;box-shadow:0 12px 28px #0003}
+.world-tip-card>span{font-size:26px}.world-tip-card strong{font-size:14px}.world-tip-card small{grid-column:2/4;color:var(--muted);font-weight:700}
+.world-tip-card button{grid-column:1/4;border:0;border-radius:12px;background:var(--blue);color:#fff;font-weight:900;padding:8px 10px;cursor:pointer}
+@media(max-width:650px){
+  .world-place .place-name{font-size:10px;padding:2px 6px}
+  .place-colours{left:39%;top:14%}.place-colours .place-icon{font-size:45px}
+  .place-animals{left:4%}.place-animals .place-icon{font-size:40px}
+  .place-food{left:46%}.place-food .place-icon{font-size:30px}
+  .place-school{right:0}.place-school .place-icon{font-size:46px}
+}
