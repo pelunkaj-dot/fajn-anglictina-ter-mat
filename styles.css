@@ -249,3 +249,23 @@ button,input{font:inherit}.topbar{position:sticky;top:0;z-index:10;display:flex;
   .place-food{left:46%}.place-food .place-icon{font-size:30px}
   .place-school{right:0}.place-school .place-icon{font-size:46px}
 }
+
+/* Weather, Transport, Emotions */
+.icon-topic{width:min(300px,78vw);height:190px;border-radius:28px;display:grid;place-items:center;margin:4px auto 16px;background:linear-gradient(180deg,#f4fbff,#fffaf1);border:1px solid #e7e0d7;box-shadow:0 12px 24px #00000010}
+.icon-topic span{font-size:104px;filter:drop-shadow(0 8px 12px #0002)}
+.icon-topic.compact{width:94px;height:76px;margin:0;border-radius:16px}
+.icon-topic.compact span{font-size:48px}
+.story-icon-row{display:flex;align-items:center;justify-content:center;gap:12px;min-height:135px;flex-wrap:wrap}
+.story-icon-row span{font-size:76px;filter:drop-shadow(0 8px 10px #0002)}
+.icon-game-target{width:min(300px,75vw)}
+.icon-game-target .icon-topic{height:160px}
+.world-scene .unlock-weather,.world-scene .unlock-transport,.world-scene .unlock-emotions{opacity:0;transform:scale(.4);transition:opacity .55s ease,transform .7s cubic-bezier(.2,1.4,.3,1)}
+.world-scene.has-weather .unlock-weather,.world-scene.has-transport .unlock-transport,.world-scene.has-emotions .unlock-emotions{opacity:1;transform:scale(1)}
+.place-weather{left:70%;top:10%}.place-weather .place-icon{font-size:44px}
+.place-transport{left:24%;bottom:8px}.place-transport .place-icon{font-size:42px}
+.place-emotions{left:72%;bottom:8px}.place-emotions .place-icon{font-size:42px}
+@media(max-width:650px){
+  .icon-topic{height:150px}.icon-topic span{font-size:82px}
+  .place-weather{left:67%;top:11%}.place-weather .place-icon{font-size:36px}
+  .place-transport{left:23%;bottom:5px}.place-emotions{left:67%;bottom:5px}
+}
