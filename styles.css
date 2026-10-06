@@ -89,3 +89,29 @@ button,input{font:inherit}.topbar{position:sticky;top:0;z-index:10;display:flex;
 @keyframes kidPop{0%{transform:scale(.2);opacity:0}35%{transform:scale(1.25);opacity:1}100%{transform:translateY(-15px) scale(1);opacity:0}}
 @keyframes recordPulse{to{transform:scale(1.18)}}
 @media(max-width:560px){.young-instruction{gap:7px;padding:10px}.instruction-arrow{display:none}.young-instruction>div:not(.instruction-arrow){flex:1 1 90px;justify-content:center}.speak-actions{grid-template-columns:1fr 1fr}.big-action{padding:13px 9px;font-size:15px}}
+/* Herní mluvení + obrazové úkoly */
+.young-game-question{display:grid;gap:12px}
+.game-instruction-icons{text-align:center;font-size:28px;font-weight:900;letter-spacing:.12em}
+.game-target{margin:2px auto 10px;display:grid;place-items:center}
+.colour-target{width:150px;height:150px;border-radius:50%;box-shadow:0 12px 28px #0004,inset 0 0 0 8px #ffffff22}
+.colour-target span{font-size:68px;filter:drop-shadow(0 5px 8px #0003)}
+.picture-target{width:min(320px,80vw)}
+.picture-target img{width:100%;display:block;border-radius:22px;box-shadow:0 12px 24px #0003}
+.generic-target{font-size:80px}
+.visual-game-options{grid-template-columns:repeat(2,minmax(150px,1fr))}
+.visual-game-option{display:grid;justify-items:center;gap:8px;text-align:center;padding:10px}
+.visual-game-option .game-target{margin:0;width:100%;height:auto}
+.visual-game-option .picture-target img{max-height:105px;object-fit:cover}
+.visual-game-option .colour-target{width:86px;height:86px}
+.visual-game-option .colour-target span{font-size:42px}
+.voice-challenge{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:10px}
+.game-mic{border:0;border-radius:24px;background:#5bc26a;color:#fff;padding:16px 24px;display:flex;align-items:center;gap:10px;font-weight:900;font-size:20px;cursor:pointer;box-shadow:0 12px 24px #0004}
+.game-mic span{font-size:34px}
+.game-mic:disabled{opacity:.65;cursor:default}
+.voice-game-result{max-width:420px;margin:15px auto 0;padding:14px 18px;border-radius:20px;display:grid;justify-items:center;text-align:center;gap:4px}
+.voice-game-result>div{font-size:46px}
+.voice-game-result strong{font-size:22px}
+.voice-game-result span{color:#4c4657}
+.goodvoice{background:#eef9d9;color:#244c27}
+.tryvoice{background:#fff0dc;color:#714d19}
+@media(max-width:560px){.visual-game-options{grid-template-columns:1fr 1fr}.game-mic{width:100%;justify-content:center}.voice-challenge{display:grid}.colour-target{width:120px;height:120px}}
