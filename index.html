@@ -50,26 +50,45 @@
         <button class="adventure-btn" id="adventureBtn">🎮 Vyrazit na výpravu</button>
       </div>
 
-      <div class="world-scene" id="worldScene" aria-label="Herní svět Terezky a Matýska">
+      <div class="world-scene" id="worldScene" aria-label="Klikací svět Terezky a Matýska">
         <div class="sky-sun">☀️</div>
         <div class="cloud cloud-a">☁️</div>
         <div class="cloud cloud-b">☁️</div>
-        <div class="rainbow unlock-colours">🌈</div>
-        <div class="world-tree unlock-animals">🌳</div>
-        <div class="world-house unlock-house">🏡</div>
-        <div class="world-animal animal-a unlock-animals">🐶</div>
-        <div class="world-animal animal-b unlock-animals">🐰</div>
-        <div class="world-picnic unlock-food">🧺 🍎 🥛</div>
-        <div class="world-number unlock-numbers">1 2 3</div>
-        <div class="world-body unlock-body">🙌</div>
-        <div class="world-family unlock-family">❤️</div>
-        <div class="world-clothes unlock-clothes">👕 🧦</div>
-        <div class="world-school unlock-school">🏫</div>
+
+        <button class="world-place place-colours unlock-colours" data-topic="colours" aria-label="Barvy">
+          <span class="place-icon">🌈</span><span class="place-name">Barvy</span><span class="place-lock">🔒</span>
+        </button>
+        <button class="world-place place-animals unlock-animals" data-topic="animals" aria-label="Zvířata">
+          <span class="place-icon">🌳🐶</span><span class="place-name">Zvířata</span><span class="place-lock">🔒</span>
+        </button>
+        <button class="world-place place-food unlock-food" data-topic="food" aria-label="Jídlo">
+          <span class="place-icon">🧺🍎</span><span class="place-name">Piknik</span><span class="place-lock">🔒</span>
+        </button>
+        <button class="world-place place-numbers unlock-numbers" data-topic="numbers" aria-label="Čísla">
+          <span class="place-icon">1 2 3</span><span class="place-name">Čísla</span><span class="place-lock">🔒</span>
+        </button>
+        <button class="world-place place-body unlock-body" data-topic="body" aria-label="Tělo">
+          <span class="place-icon">🙌</span><span class="place-name">Tělo</span><span class="place-lock">🔒</span>
+        </button>
+        <button class="world-place place-family unlock-family" data-topic="family" aria-label="Rodina">
+          <span class="place-icon">❤️</span><span class="place-name">Rodina</span><span class="place-lock">🔒</span>
+        </button>
+        <button class="world-place place-clothes unlock-clothes" data-topic="clothes" aria-label="Oblečení">
+          <span class="place-icon">👕🧦</span><span class="place-name">Oblečení</span><span class="place-lock">🔒</span>
+        </button>
+        <button class="world-place place-house unlock-house" data-topic="house" aria-label="Dům">
+          <span class="place-icon">🏡</span><span class="place-name">Dům</span><span class="place-lock">🔒</span>
+        </button>
+        <button class="world-place place-school unlock-school" data-topic="school" aria-label="Škola">
+          <span class="place-icon">🏫</span><span class="place-name">Škola</span><span class="place-lock">🔒</span>
+        </button>
+
         <div class="world-friends">
           <img src="assets/characters/terezka.svg" alt="Terezka">
           <img src="assets/characters/matysek.svg" alt="Matýsek">
         </div>
         <div class="world-ground"></div>
+        <div class="world-tip" id="worldTip" aria-live="polite"></div>
       </div>
 
       <div class="world-progress"><span id="worldFill"></span></div>
@@ -99,5 +118,6 @@
   <script src="story-roleplay.js"></script>
   <script src="topic-expansion.js"></script>
   <script src="picture-topics.js"></script>
+  <script src="world-map.js"></script>
 </body>
 </html>
