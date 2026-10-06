@@ -69,13 +69,16 @@ async function recordYoungWord(expected){
         wp[expected] = Math.max(Number(wp[expected] || 0),score);
         saveState();
         if(score >= 80){
+          kidSound("success");
           out.innerHTML = '<div class="kid-feedback great"><div class="feedback-face">🌟</div><strong>Paráda!</strong><span>Zní to moc dobře.</span></div>';
           tinyCelebrate();
         } else if(score >= 60){
+          kidSound("success");
           out.innerHTML = '<div class="kid-feedback good"><div class="feedback-face">🙂</div><strong>Dobré!</strong><span>Zkus to ještě jednou.</span><div class="micro-actions"><button class="btn speak" id="hearAgain">🔊 Ještě jednou</button><button class="btn good" id="sayAgain">🎙️ Zkusím znovu</button></div></div>';
           document.getElementById("hearAgain").onclick=()=>speak(expected);
           document.getElementById("sayAgain").onclick=()=>recordYoungWord(expected);
         } else {
+          kidSound("try");
           out.innerHTML = '<div class="kid-feedback try"><div class="feedback-face">👂</div><strong>Poslechni ještě jednou.</strong><span>A pak to zkus znovu.</span><div class="micro-actions"><button class="btn speak" id="hearAgain">🔊 Poslechnout</button><button class="btn good" id="sayAgain">🎙️ Řeknu to</button></div></div>';
           document.getElementById("hearAgain").onclick=()=>speak(expected);
           document.getElementById("sayAgain").onclick=()=>recordYoungWord(expected);
