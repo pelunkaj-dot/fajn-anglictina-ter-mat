@@ -188,3 +188,21 @@ button,input{font:inherit}.topbar{position:sticky;top:0;z-index:10;display:flex;
 .matysek-portrait{margin-left:-18px;transform:translateY(28px)}
 .matysek-portrait img{background:#D4EEFF}
 @media(max-width:650px){.characters{display:flex;justify-content:center}.character-portrait img{width:88px;height:88px}.matysek-portrait{transform:translateY(18px)}}
+
+/* Tematické odemykání světa */
+.world-scene .unlock-colours,.world-scene .unlock-animals,.world-scene .unlock-food,.world-scene .unlock-numbers,.world-scene .unlock-body,.world-scene .unlock-family{opacity:0;transform:scale(.4);transition:opacity .55s ease,transform .7s cubic-bezier(.2,1.4,.3,1)}
+.world-scene.has-colours .unlock-colours,
+.world-scene.has-animals .unlock-animals,
+.world-scene.has-food .unlock-food,
+.world-scene.has-numbers .unlock-numbers,
+.world-scene.has-body .unlock-body,
+.world-scene.has-family .unlock-family{opacity:1;transform:scale(1)}
+.world-number{position:absolute;left:42%;bottom:88px;font-size:28px;font-weight:900;color:#7a55c5;background:#fff8;border-radius:14px;padding:5px 10px;z-index:2}
+.world-body{position:absolute;left:57%;bottom:96px;font-size:34px;z-index:2}
+.world-family{position:absolute;right:30%;bottom:92px;font-size:34px;z-index:2}
+.world-friends{position:absolute;left:21%;bottom:29px;display:flex;z-index:3}
+.world-friends img{width:58px;height:58px;border-radius:50%;background:#fff;border:4px solid #fff;box-shadow:0 8px 18px #0002}
+.world-friends img+img{margin-left:-10px;margin-top:14px}
+.character-token{display:flex;align-items:flex-end}
+.character-token img{width:42px;height:42px;border-radius:50%;background:#fff;border:2px solid #fff;box-shadow:0 4px 10px #0005}
+.character-token img+img{margin-left:-9px;transform:translateY(6px)}
