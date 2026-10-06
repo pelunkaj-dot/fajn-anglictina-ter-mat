@@ -4,7 +4,7 @@ window.FAJN_DATA = {
       id:"colours", title:"Colours", cz:"Barvy", emoji:"🎨",
       words:[
         {en:"red",cz:"červená",color:"#e53935",visual:"🍎"},{en:"blue",cz:"modrá",color:"#1e88e5",visual:"💧"},{en:"green",cz:"zelená",color:"#43a047",visual:"🍃"},{en:"yellow",cz:"žlutá",color:"#fdd835",visual:"☀️"},
-        {en:"orange",cz:"oranžová",color:"#fb8c00",visual:"🍊"},{en:"pink",cz:"růžová",color:"#ec407a",visual:"🌸"},{en:"black",cz:"černá",color:"#202124",visual:"🐈‍⬛"},{en:"white",cz:"bílá",color:"#ffffff",visual:"☁️"}
+        {en:"orange",cz:"oranžová",color:"#fb8c00",visual:"🍊"},{en:"pink",cz:"růžová",color:"#ec407a",visual:"🌸"},{en:"purple",cz:"fialová",color:"#8e5cc2",visual:"🍇"},{en:"brown",cz:"hnědá",color:"#8d6e63",visual:"🧸"},{en:"black",cz:"černá",color:"#202124",visual:"🐈‍⬛"},{en:"white",cz:"bílá",color:"#ffffff",visual:"☁️"}
       ],
       sentences:[
         {en:"It is red.",cz:"Je to červené."},{en:"My bag is blue.",cz:"Moje taška je modrá."},
@@ -55,7 +55,7 @@ window.FAJN_DATA = {
       id:"numbers", title:"Numbers", cz:"Čísla", emoji:"🔢",
       words:[
         {en:"one",cz:"jedna",num:1},{en:"two",cz:"dvě",num:2},{en:"three",cz:"tři",num:3},{en:"four",cz:"čtyři",num:4},
-        {en:"five",cz:"pět",num:5},{en:"six",cz:"šest",num:6},{en:"seven",cz:"sedm",num:7},{en:"eight",cz:"osm",num:8}
+        {en:"five",cz:"pět",num:5},{en:"six",cz:"šest",num:6},{en:"seven",cz:"sedm",num:7},{en:"eight",cz:"osm",num:8},{en:"nine",cz:"devět",num:9},{en:"ten",cz:"deset",num:10}
       ],
       sentences:[
         {en:"I have one apple.",cz:"Mám jedno jablko."},{en:"I can see two dogs.",cz:"Vidím dva psy."},
@@ -105,11 +105,11 @@ window.FAJN_DATA = {
     {
       id:"clothes", title:"Clothes", cz:"Oblečení", emoji:"👕",
       words:[
-        {en:"shirt",cz:"tričko"},{en:"shoes",cz:"boty"},{en:"socks",cz:"ponožky"},{en:"hat",cz:"čepice"},
+        {en:"T-shirt",cz:"tričko"},{en:"shoes",cz:"boty"},{en:"socks",cz:"ponožky"},{en:"hat",cz:"čepice"},
         {en:"coat",cz:"kabát"},{en:"dress",cz:"šaty"},{en:"trousers",cz:"kalhoty"},{en:"gloves",cz:"rukavice"}
       ],
       sentences:[
-        {en:"This is my shirt.",cz:"Tohle je moje tričko."},{en:"Put on your shoes.",cz:"Obuj si boty."},
+        {en:"This is my T-shirt.",cz:"Tohle je moje tričko."},{en:"Put on your shoes.",cz:"Obuj si boty."},
         {en:"My hat is red.",cz:"Moje čepice je červená."},{en:"I have blue trousers.",cz:"Mám modré kalhoty."}
       ],
       story:[
@@ -157,7 +157,7 @@ window.FAJN_DATA = {
       id:"weather", title:"Weather", cz:"Počasí", emoji:"⛅",
       words:[
         {en:"sun",cz:"slunce",visual:"☀️"},{en:"rain",cz:"déšť",visual:"🌧️"},{en:"snow",cz:"sníh",visual:"❄️"},{en:"cloud",cz:"mrak",visual:"☁️"},
-        {en:"wind",cz:"vítr",visual:"💨"},{en:"rainbow",cz:"duha",visual:"🌈"},{en:"thunder",cz:"bouřka",visual:"⛈️"},{en:"fog",cz:"mlha",visual:"🌫️"}
+        {en:"wind",cz:"vítr",visual:"💨"},{en:"rainbow",cz:"duha",visual:"🌈"},{en:"thunder",cz:"hrom",visual:"⛈️"},{en:"fog",cz:"mlha",visual:"🌫️"}
       ],
       sentences:[
         {en:"The sun is shining.",cz:"Slunce svítí."},{en:"It is raining.",cz:"Prší."},
