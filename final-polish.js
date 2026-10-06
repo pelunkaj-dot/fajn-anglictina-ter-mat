@@ -65,10 +65,10 @@ recordPronunciation = async function(expected){
         ts.bestPronunciation=Math.max(ts.bestPronunciation||0,score);
         saveState();
         let message="";
-        if(score>=80) message='<div class="kid-feedback great"><div class="feedback-face">🌟</div><strong>Výborně!</strong><span>Bylo ti krásně rozumět.</span></div>';
-        else if(score>=60) message='<div class="kid-feedback good"><div class="feedback-face">🙂</div><strong>Dobře!</strong><span>Ještě jednou a bude to jistější.</span></div>';
-        else message='<div class="kid-feedback try"><div class="feedback-face">👂</div><strong>Poslechni ještě jednou.</strong><span>A pak větu zopakuj.</span></div>';
-        out.innerHTML=message+`<div class="controls"><button class="btn speak" id="hearSentenceAgain">🔊 Poslechnout</button><button class="btn good" id="saySentenceAgain">🎙️ Znovu</button><button class="btn primary" id="continueSentence">${currentIndex===currentTopic.sentences.length-1?"Pokračovat":"Další věta"} →</button></div>`;
+        if(score>=80){ kidSound("success"); message='<div class="kid-feedback great"><div class="feedback-face">🌟</div><strong>Výborně!</strong><span>Bylo ti krásně rozumět.</span></div>';
+        } else if(score>=60){ kidSound("success"); message='<div class="kid-feedback good"><div class="feedback-face">🙂</div><strong>Dobře!</strong><span>Ještě jednou a bude to jistější.</span></div>';
+        } else { kidSound("try"); message='<div class="kid-feedback try"><div class="feedback-face">👂</div><strong>Poslechni ještě jednou.</strong><span>A pak větu zopakuj.</span></div>';
+        } out.innerHTML=message+`<div class="controls"><button class="btn speak" id="hearSentenceAgain">🔊 Poslechnout</button><button class="btn good" id="saySentenceAgain">🎙️ Znovu</button><button class="btn primary" id="continueSentence">${currentIndex===currentTopic.sentences.length-1?"Pokračovat":"Další věta"} →</button></div>`;
         document.getElementById("hearSentenceAgain").onclick=()=>speak(expected);
         document.getElementById("saySentenceAgain").onclick=()=>renderSpeak();
         document.getElementById("continueSentence").onclick=()=>{
@@ -140,11 +140,11 @@ renderQuiz = function(){
     const fb=document.getElementById("feedback");
     if(btn.dataset.a===w.en){
       quizScore++;
-      fb.className="feedback ok"; fb.textContent="⭐ Správně!";
+      kidSound("success"); fb.className="feedback ok"; fb.textContent="⭐ Správně!";
       document.querySelectorAll("[data-a]").forEach(x=>x.disabled=true);
       setTimeout(()=>{currentIndex++;renderQuiz();},550);
     }else{
-      btn.disabled=true;
+      kidSound("try"); btn.disabled=true;
       fb.className="feedback bad"; fb.textContent="🙂 Zkus jinou možnost.";
       if(listenMode) speak(w.en);
     }
