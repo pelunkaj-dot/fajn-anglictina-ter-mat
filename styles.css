@@ -327,3 +327,10 @@ button,input{font:inherit}.topbar{position:sticky;top:0;z-index:10;display:flex;
 .parent-actions{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:18px}
 .danger-parent{background:#fff0f0!important;color:#a33939!important}
 @media(max-width:650px){.parent-head{grid-template-columns:1fr}.parent-summary{justify-content:flex-start}.parent-modal{padding-top:52px}.parent-top-btn{padding:5px 8px}}
+
+.world-tip-card.unlocked-tip{grid-template-columns:auto 1fr}
+.world-tip-card.unlocked-tip small{grid-column:2/3}
+.world-tip-actions{grid-column:1/3;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.world-tip-actions button{border:0;border-radius:12px;padding:9px 10px;font-weight:900;cursor:pointer}
+.world-tip-actions button:first-child{background:#5bc26a;color:#fff}
+.world-tip-actions button:last-child{background:#e9f2ff;color:#315f8c}
