@@ -48,3 +48,15 @@ button,input{font:inherit}.topbar{position:sticky;top:0;z-index:10;display:flex;
 .color-option:disabled{opacity:.7;cursor:default}
 .swatch{width:54px;height:54px;border-radius:14px;display:block;box-shadow:inset 0 0 0 3px #ffffff44}
 @media(max-width:520px){.colour-orb{width:120px;height:120px}.colour-orb span{font-size:58px}.color-options{grid-template-columns:1fr}}
+
+/* Animals & Food: illustrated learning */
+.picture-visual{width:min(420px,90vw);margin:4px auto 16px;display:grid;justify-items:center}
+.picture-visual img{width:100%;max-width:360px;height:auto;display:block;filter:drop-shadow(0 12px 18px #00000014)}
+.visual-options{display:grid;grid-template-columns:repeat(2,minmax(150px,1fr));gap:12px;margin-top:18px}
+.visual-option{border:1px solid var(--line);background:#fff;border-radius:18px;padding:12px;display:grid;grid-template-columns:60px 1fr;align-items:center;gap:12px;text-align:left;cursor:pointer;font-weight:900;transition:.16s}
+.visual-option:hover{transform:translateY(-2px);border-color:var(--blue);box-shadow:0 8px 18px #00000010}
+.visual-option:disabled{opacity:.7;cursor:default}
+.picture-choice{grid-template-columns:86px 1fr}
+.mini-picture{width:86px;display:block}
+.mini-picture img{width:86px;height:64px;object-fit:cover;display:block;border-radius:13px}
+@media(max-width:520px){.visual-options{grid-template-columns:1fr}.picture-visual{width:100%}}
