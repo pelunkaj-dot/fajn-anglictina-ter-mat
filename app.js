@@ -141,6 +141,7 @@ function renderLearn(){
     <h2>👋 Nauč mě to</h2>
     <p class="mini">Nejdřív slovo slyš, podívej se na význam a řekni si ho nahlas. Nespěcháme.</p>
     <div class="word-card">
+      ${currentTopic.id==="colours" ? colorVisualHtml(w) : ""}
       <div class="bigword">${esc(w.en)}</div>
       <div class="translation">${esc(w.cz)}</div>
       <div class="controls">
@@ -165,13 +166,17 @@ function renderRecognize(){
     <div class="word-card">
       <button class="btn speak" id="listen">🔊</button>
       <div class="bigword">${esc(w.en)}</div>
-      <div class="options">
-        ${choices.map(c=>`<button class="option" data-cz="${esc(c.cz)}">${esc(c.cz)}</button>`).join("")}
+      ${currentTopic.id==="colours" ? '<p class="mini" style="text-align:center">Klikni na správnou barvu.</p>' : ""}
+      <div class="${currentTopic.id==="colours" ? "color-options" : "options"}">
+        ${choices.map(c=> currentTopic.id==="colours"
+          ? `<button class="color-option" data-cz="${esc(c.cz)}" aria-label="${esc(c.cz)}"><span class="swatch" style="background:${c.color};${c.en==="white"?"border:2px solid #ddd;":""}"></span><strong>${esc(c.cz)}</strong></button>`
+          : `<button class="option" data-cz="${esc(c.cz)}">${esc(c.cz)}</button>`
+        ).join("")}
       </div>
       <div id="feedback"></div>
     </div>`);
   document.getElementById("listen").onclick=()=>speak(w.en);
-  document.querySelectorAll(".option").forEach(btn=>btn.onclick=()=>{
+  document.querySelectorAll(currentTopic.id==="colours" ? ".color-option" : ".option").forEach(btn=>btn.onclick=()=>{
     const fb=document.getElementById("feedback");
     if(btn.dataset.cz===w.cz){
       fb.className="feedback ok";fb.textContent="Ano! Přesně.";
@@ -255,6 +260,17 @@ async function recordPronunciation(expected){
     out.className="feedback bad";
     out.textContent="Nemám přístup k mikrofonu. Povol mikrofon v prohlížeči a zkus to znovu.";
   }
+}
+
+function colorVisualHtml(w){
+  const border=w.en==="white" ? "border:2px solid #d8d8d8;" : "";
+  return `
+    <div class="colour-visual" aria-label="${esc(w.cz)}">
+      <div class="colour-orb" style="background:${w.color};${border}">
+        <span>${w.visual||""}</span>
+      </div>
+      <div class="colour-strip" style="background:${w.color};${border}"></div>
+    </div>`;
 }
 
 function renderStory(){
