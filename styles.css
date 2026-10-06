@@ -138,3 +138,45 @@ button,input{font:inherit}.topbar{position:sticky;top:0;z-index:10;display:flex;
 .comic-actions .btn{flex:1 1 140px}
 .storyPronResult .kid-feedback{margin-top:10px}
 @media(max-width:720px){.comic-strip{grid-template-columns:1fr}.comic-picture{min-height:125px}.comic-picture img{height:125px}.story-rainbow{font-size:72px}}
+/* Numbers, Body, Family visuals */
+.number-visual{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center;justify-content:center;max-width:360px;margin:6px auto 18px;padding:16px;border-radius:24px;background:#fff8dd;border:1px solid #efd99b}
+.number-big{font-size:88px;line-height:1;font-weight:900;color:#e89b20}
+.number-dots{display:grid;grid-template-columns:repeat(4,28px);gap:8px;justify-content:center}
+.number-dot{width:28px;height:28px;border-radius:50%;background:#ffb74d;box-shadow:inset 0 0 0 4px #ffffff55}
+.number-visual.compact{grid-template-columns:auto 1fr;padding:8px;gap:8px;margin:0;background:#fff9e8}
+.number-visual.compact .number-big{font-size:42px}
+.number-visual.compact .number-dots{grid-template-columns:repeat(4,13px);gap:4px}
+.number-visual.compact .number-dot{width:13px;height:13px}
+.body-visual{position:relative;width:210px;height:260px;margin:0 auto 18px}
+.body-head{position:absolute;left:72px;top:8px;width:66px;height:66px;border-radius:50%;background:#f0c59f;border:4px solid #bd936f}
+.body-eyes{position:absolute;left:83px;top:29px;width:44px;text-align:center;color:#3b2b24;font-size:22px;letter-spacing:8px;background:transparent!important}
+.body-ears{position:absolute;left:56px;top:31px;width:98px;text-align:center;color:#bd936f;font-size:23px;background:transparent!important}
+.body-nose{position:absolute;left:97px;top:46px;width:18px;text-align:center;color:#bd936f;font-size:15px;background:transparent!important}
+.body-mouth{position:absolute;left:91px;top:55px;width:32px;text-align:center;color:#9d554c;font-size:22px;background:transparent!important}
+.body-torso{position:absolute;left:64px;top:78px;width:82px;height:95px;border-radius:34px 34px 20px 20px;background:#79b9e9}
+.body-hands{position:absolute;left:15px;right:15px;top:98px;height:48px;display:flex;justify-content:space-between;background:transparent!important}
+.body-hands span{width:36px;height:36px;border-radius:50%;background:#f0c59f;border:3px solid #bd936f}
+.body-knees{position:absolute;left:68px;right:68px;top:183px;display:flex;justify-content:space-between;background:transparent!important}
+.body-knees span{width:28px;height:28px;border-radius:50%;background:#f0c59f;border:3px solid #bd936f}
+.body-feet{position:absolute;left:50px;right:50px;bottom:4px;display:flex;justify-content:space-between;background:transparent!important}
+.body-feet span{width:42px;height:22px;border-radius:18px;background:#5568a7}
+.body-part.active:not(.body-eyes):not(.body-ears):not(.body-nose):not(.body-mouth):not(.body-hands):not(.body-knees):not(.body-feet){box-shadow:0 0 0 8px #ffd65a,0 0 24px #ffd65aaa}
+.body-part.active.body-eyes,.body-part.active.body-ears,.body-part.active.body-nose,.body-part.active.body-mouth{color:#e94d4d!important;text-shadow:0 0 10px #ffd65a}
+.body-part.active.body-hands span,.body-part.active.body-knees span,.body-part.active.body-feet span{box-shadow:0 0 0 6px #ffd65a,0 0 18px #ffd65aaa}
+.body-visual.compact{transform:scale(.52);transform-origin:center;width:110px;height:135px;margin:-32px auto}
+.family-visual{display:flex;align-items:flex-end;justify-content:center;gap:8px;min-height:170px;margin:4px auto 18px}
+.person-card{position:relative;width:56px;height:130px;display:grid;justify-items:center}
+.person-head{width:44px;height:44px;border-radius:50%;background:#efc39f;border:3px solid #b98565;z-index:2}
+.person-body{width:52px;height:78px;border-radius:22px 22px 10px 10px;background:#7bb7e8;margin-top:-2px}
+.person-card.mum .person-body,.person-card.sister .person-body{background:#ef8fa2}
+.person-card.dad .person-body,.person-card.brother .person-body{background:#6ea9df}
+.person-card.grandma .person-head,.person-card.grandpa .person-head{box-shadow:inset 0 10px 0 #e8e8e8}
+.person-card.baby{transform:scale(.68);transform-origin:bottom center}
+.person-card.baby .person-body{background:#f7c96d}
+.person-card.family{display:none}
+.family-visual.compact{min-height:90px;gap:3px;margin:0}
+.family-visual.compact .person-card{transform:scale(.58);transform-origin:bottom center;margin:0 -10px;height:88px}
+.family-visual.compact .person-card.baby{transform:scale(.42)}
+.topic-visual-options .topic-choice{display:grid;grid-template-columns:1fr;justify-items:center;text-align:center;min-height:130px}
+.custom-target{width:min(340px,82vw);height:auto}
+@media(max-width:560px){.number-big{font-size:68px}.body-visual{transform:scale(.86);transform-origin:top center;margin-bottom:-16px}.family-visual{transform:scale(.9);transform-origin:center}.topic-visual-options{grid-template-columns:repeat(2,1fr)}}
