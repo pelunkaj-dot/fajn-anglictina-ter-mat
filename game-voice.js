@@ -63,7 +63,7 @@ renderAdventure = function(){
       <div class="adventure-map">
         <div class="stars-bg"></div><div class="moon">🌙</div><div class="trail"></div>
         ${game.questions.map((_,i)=>`<div class="checkpoint ${i<game.round?"done":""}" style="left:${8+i*(80/(game.questions.length-1))}%">${i<game.round?"★":""}</div>`).join("")}
-        <div class="hero-token" style="left:${6+progress*.8}%">👧🏻👦🏻</div>
+        <div class="hero-token character-token" style="left:${6+progress*.8}%"><img src="assets/characters/terezka.svg" alt=""><img src="assets/characters/matysek.svg" alt=""></div>
         <div class="treasure">🎁</div>
       </div>
       <div class="game-question young-game-question">
