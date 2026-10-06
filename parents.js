@@ -79,11 +79,12 @@ function renderParentDashboard(){
     return `<tr>
       <td><strong>${topic.emoji} ${esc(topic.cz)}</strong><small>${esc(topic.title)}</small></td>
       <td>${done}/5</td>
-      <td>${ts.mastered?"🏅 Umím":"—"}</td>
+      <td>${ts.mastered?"🏅 Umím":ts.stages?.every(Boolean)?"✅ Prošel/a":"—"}</td>
       <td>${pronunciationLabel(ts.bestPronunciation)}</td>
     </tr>`;
   }).join("");
   const mastered=FAJN_DATA.topics.filter(t=>topicState(t.id).mastered).length;
+  const completed=FAJN_DATA.topics.filter(t=>topicState(t.id).stages.every(Boolean)).length;
   const attempted=FAJN_DATA.topics.filter(t=>topicState(t.id).stages.some(Boolean)).length;
   const games=state.games||{plays:0,best:0};
   parentOverlay(`
@@ -92,6 +93,7 @@ function renderParentDashboard(){
       <div><p class="eyebrow">PRO RODIČE</p><h2>Jak se dítěti daří</h2></div>
       <div class="parent-summary">
         <span><b>${mastered}</b><small>témat umí</small></span>
+        <span><b>${completed}</b><small>témat dokončilo</small></span>
         <span><b>${attempted}</b><small>témat zkusilo</small></span>
         <span><b>${games.best||0}</b><small>herní rekord</small></span>
       </div>
