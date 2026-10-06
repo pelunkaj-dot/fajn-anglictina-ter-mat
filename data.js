@@ -101,6 +101,57 @@ window.FAJN_DATA = {
         {speaker:"Terezka",en:"I have a brother.",cz:"Mám bratra."},
         {speaker:"Matýsek",en:"I have a sister.",cz:"Mám sestru."}
       ]
+    },
+    {
+      id:"clothes", title:"Clothes", cz:"Oblečení", emoji:"👕",
+      words:[
+        {en:"shirt",cz:"tričko"},{en:"shoes",cz:"boty"},{en:"socks",cz:"ponožky"},{en:"hat",cz:"čepice"},
+        {en:"coat",cz:"kabát"},{en:"dress",cz:"šaty"},{en:"trousers",cz:"kalhoty"},{en:"gloves",cz:"rukavice"}
+      ],
+      sentences:[
+        {en:"This is my shirt.",cz:"Tohle je moje tričko."},{en:"Put on your shoes.",cz:"Obuj si boty."},
+        {en:"My hat is red.",cz:"Moje čepice je červená."},{en:"I have blue trousers.",cz:"Mám modré kalhoty."}
+      ],
+      story:[
+        {speaker:"Terezka",en:"Where is my hat?",cz:"Kde je moje čepice?"},
+        {speaker:"Matýsek",en:"Here is your hat.",cz:"Tady je tvoje čepice."},
+        {speaker:"Terezka",en:"I need my coat too.",cz:"Potřebuji také kabát."},
+        {speaker:"Matýsek",en:"And do not forget your shoes!",cz:"A nezapomeň na boty!"}
+      ]
+    },
+    {
+      id:"house", title:"House", cz:"Dům", emoji:"🏠",
+      words:[
+        {en:"house",cz:"dům"},{en:"door",cz:"dveře"},{en:"window",cz:"okno"},{en:"kitchen",cz:"kuchyně"},
+        {en:"table",cz:"stůl"},{en:"chair",cz:"židle"},{en:"bed",cz:"postel"},{en:"garden",cz:"zahrada"}
+      ],
+      sentences:[
+        {en:"This is my house.",cz:"Tohle je můj dům."},{en:"Open the door.",cz:"Otevři dveře."},
+        {en:"The cat is on the chair.",cz:"Kočka je na židli."},{en:"I sleep in my bed.",cz:"Spím ve své posteli."}
+      ],
+      story:[
+        {speaker:"Matýsek",en:"Welcome to my house!",cz:"Vítej u mě doma!"},
+        {speaker:"Terezka",en:"I like your garden.",cz:"Líbí se mi tvoje zahrada."},
+        {speaker:"Matýsek",en:"Come into the kitchen.",cz:"Pojď do kuchyně."},
+        {speaker:"Terezka",en:"I can see a big table.",cz:"Vidím velký stůl."}
+      ]
+    },
+    {
+      id:"school", title:"School", cz:"Škola", emoji:"🎒",
+      words:[
+        {en:"school",cz:"škola"},{en:"bag",cz:"taška"},{en:"pencil",cz:"tužka"},{en:"book",cz:"kniha"},
+        {en:"ruler",cz:"pravítko"},{en:"desk",cz:"lavice"},{en:"teacher",cz:"učitelka / učitel"},{en:"bell",cz:"zvonek"}
+      ],
+      sentences:[
+        {en:"This is my school.",cz:"Tohle je moje škola."},{en:"My pencil is in my bag.",cz:"Moje tužka je v tašce."},
+        {en:"Open your book.",cz:"Otevři si knihu."},{en:"The bell is ringing.",cz:"Zvonek zvoní."}
+      ],
+      story:[
+        {speaker:"Terezka",en:"My bag is ready.",cz:"Moje taška je připravená."},
+        {speaker:"Matýsek",en:"I have a book and a pencil.",cz:"Mám knihu a tužku."},
+        {speaker:"Terezka",en:"Listen! The bell is ringing.",cz:"Poslouchej! Zvonek zvoní."},
+        {speaker:"Matýsek",en:"Let us go to class.",cz:"Pojďme do třídy."}
+      ]
     }
   ]
 };
