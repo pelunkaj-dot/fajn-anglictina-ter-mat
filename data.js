@@ -50,6 +50,57 @@ window.FAJN_DATA = {
         {speaker:"Terezka",en:"Yes, please. And some water.",cz:"Ano, prosím. A trochu vody."},
         {speaker:"Matýsek",en:"Here you are.",cz:"Tady máš."}
       ]
+    },
+    {
+      id:"numbers", title:"Numbers", cz:"Čísla", emoji:"🔢",
+      words:[
+        {en:"one",cz:"jedna",num:1},{en:"two",cz:"dvě",num:2},{en:"three",cz:"tři",num:3},{en:"four",cz:"čtyři",num:4},
+        {en:"five",cz:"pět",num:5},{en:"six",cz:"šest",num:6},{en:"seven",cz:"sedm",num:7},{en:"eight",cz:"osm",num:8}
+      ],
+      sentences:[
+        {en:"I have one apple.",cz:"Mám jedno jablko."},{en:"I can see two dogs.",cz:"Vidím dva psy."},
+        {en:"There are three books.",cz:"Jsou tam tři knihy."},{en:"I have five pencils.",cz:"Mám pět tužek."}
+      ],
+      story:[
+        {speaker:"Terezka",en:"I have two apples.",cz:"Mám dvě jablka."},
+        {speaker:"Matýsek",en:"I have three apples.",cz:"Mám tři jablka."},
+        {speaker:"Terezka",en:"Two and three make five.",cz:"Dvě a tři je pět."},
+        {speaker:"Matýsek",en:"Five apples! Great!",cz:"Pět jablek! Paráda!"}
+      ]
+    },
+    {
+      id:"body", title:"Body", cz:"Tělo", emoji:"🧍",
+      words:[
+        {en:"head",cz:"hlava",part:"head"},{en:"eyes",cz:"oči",part:"eyes"},{en:"ears",cz:"uši",part:"ears"},{en:"nose",cz:"nos",part:"nose"},
+        {en:"mouth",cz:"ústa",part:"mouth"},{en:"hands",cz:"ruce",part:"hands"},{en:"knees",cz:"kolena",part:"knees"},{en:"feet",cz:"chodidla",part:"feet"}
+      ],
+      sentences:[
+        {en:"This is my head.",cz:"Tohle je moje hlava."},{en:"I have two eyes.",cz:"Mám dvě oči."},
+        {en:"Clap your hands.",cz:"Tleskni rukama."},{en:"Touch your knees.",cz:"Dotkni se kolen."}
+      ],
+      story:[
+        {speaker:"Matýsek",en:"Touch your head!",cz:"Dotkni se hlavy!"},
+        {speaker:"Terezka",en:"Now touch your nose!",cz:"Teď se dotkni nosu!"},
+        {speaker:"Matýsek",en:"Clap your hands!",cz:"Tleskni rukama!"},
+        {speaker:"Terezka",en:"And stamp your feet!",cz:"A zadup nohama!"}
+      ]
+    },
+    {
+      id:"family", title:"Family", cz:"Rodina", emoji:"👨‍👩‍👧",
+      words:[
+        {en:"mum",cz:"maminka",person:"mum"},{en:"dad",cz:"tatínek",person:"dad"},{en:"sister",cz:"sestra",person:"sister"},{en:"brother",cz:"bratr",person:"brother"},
+        {en:"grandma",cz:"babička",person:"grandma"},{en:"grandpa",cz:"dědeček",person:"grandpa"},{en:"baby",cz:"miminko",person:"baby"},{en:"family",cz:"rodina",person:"family"}
+      ],
+      sentences:[
+        {en:"This is my mum.",cz:"Tohle je moje maminka."},{en:"This is my dad.",cz:"Tohle je můj tatínek."},
+        {en:"I have a sister.",cz:"Mám sestru."},{en:"This is my family.",cz:"Tohle je moje rodina."}
+      ],
+      story:[
+        {speaker:"Terezka",en:"This is my family.",cz:"Tohle je moje rodina."},
+        {speaker:"Matýsek",en:"This is my mum and my dad.",cz:"Tohle je moje maminka a můj tatínek."},
+        {speaker:"Terezka",en:"I have a brother.",cz:"Mám bratra."},
+        {speaker:"Matýsek",en:"I have a sister.",cz:"Mám sestru."}
+      ]
     }
   ]
 };
