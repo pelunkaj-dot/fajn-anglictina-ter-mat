@@ -116,7 +116,7 @@ function navButton(label="Pokračovat"){
 
 async function speak(text){
   try{
-    const res=await fetch(API_TTS,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({text,language:"en-GB",voice:"alloy"})});
+    const res=await fetch(API_TTS,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({text,lang:"en",voice:"english-female",speed:1.0})});
     if(!res.ok) throw new Error();
     const blob=await res.blob();
     const url=URL.createObjectURL(blob);
