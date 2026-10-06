@@ -161,7 +161,7 @@ renderFinish=function(){
   shell(`
     <div class="finish-characters"><img src="assets/characters/terezka.svg" alt="Terezka"><img src="assets/characters/matysek.svg" alt="Matýsek"></div>
     <h2 class="finish-title">${ts.mastered?"🏅 Téma opravdu umíš!":"⭐ Téma jsi prošel/prošla"}</h2>
-    <p class="finish-copy">${ts.mastered?"Skvělé! Ve světě Terezky a Matýska se ti odemklo nové místo.":"Cestu jsi prošel/prošla. Pro odznak „Umím“ si ještě zkus mluvení tak, aby ti bylo dobře rozumět."}</p>
+    <p class="finish-copy">${ts.mastered?"Skvělé! Nové místo ve světě je odemčené a získáváš odznak „Umím“.":"Téma je dokončené a nové místo ve světě se odemklo. Pro odznak „Umím“ ještě potrénuj mluvení."}</p>
     <div class="controls"><button class="btn" id="repeat">Projít znovu</button><button class="btn primary" id="home">Do našeho světa →</button></div>`);
   document.getElementById("repeat").onclick=()=>{currentStage=0;currentIndex=0;renderStage();};
   document.getElementById("home").onclick=renderHome;
