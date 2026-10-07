@@ -99,3 +99,9 @@ test('TH distinguishes voiced and voiceless articulation descriptions', () => {
   assert.match(h.childSoundDescription('ð',0), /TH s hlasem/);
   assert.match(h.childSoundDescription(null,1), /název se nepodařilo spolehlivě určit/);
 });
+test('Sentence recognition uncertainty is visible separately from good phonemes',()=>{
+ const h=helper();
+ const html=h.childPronunciationParts({contentScore:75,words:[{word:'my',ok:true},{word:'bag',ok:false}],pronunciation:{status:'assessed',words:[{word:'my',accuracyScore:95,phonemes:[95,95].map(accuracyScore=>({accuracyScore}))},{word:'bag',accuracyScore:95,phonemes:[95,95,95].map(accuracyScore=>({accuracyScore}))}],issues:[]}});
+ assert.match(html,/Rozpoznání celé věty/); assert.match(html,/Výsledky hlásek jsou uvedené zvlášť/);
+ assert.match(html,/<b>M<\/b>/); assert.doesNotMatch(html,/75|95|%/);
+});

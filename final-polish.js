@@ -17,8 +17,19 @@ function smallVisual(topic,word,compact=false){
 }
 
 function sentencePicture(topic,sentence){
-  const text=(sentence.en||"").toLowerCase();
-  const word=topic.words.find(w=>text.includes(w.en.toLowerCase()));
+  const text=(sentence.en||"").toLowerCase().replace(/[^a-z0-9\s-]/g," ");
+  const mentions = word => {
+    const key=word.en.toLowerCase();
+    return text.split(/\s+/).some(token=>token===key || token===key+"s" || token===key+"es");
+  };
+  // The object in the sentence matters more than its colour. Search across
+  // topics: a blue bag is still a bag, even in the Colours lesson.
+  const topics=window.FAJN_DATA?.topics || [topic];
+  const objects=topics.filter(t=>!["colours","numbers","emotions"].includes(t.id))
+    .flatMap(t=>t.words.filter(mentions).map(word=>({topic:t,word})));
+  const object=objects[0];
+  if(object) return smallVisual(object.topic,object.word,false);
+  const word=topic.words.find(mentions);
   return word ? smallVisual(topic,word,false) : `<div class="sentence-topic-icon">${topic.emoji}</div>`;
 }
 

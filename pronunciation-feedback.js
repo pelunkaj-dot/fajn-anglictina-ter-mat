@@ -77,7 +77,7 @@ const childReferenceSounds = {
   rabbit: ['r', 'æ', 'b', 'ɪ', 't'], dog: ['d', 'ɒ', 'g'],
   three: ['θ', 'r', 'i'], think: ['θ', 'ɪ', 'ŋ', 'k'],
   this: ['ð', 'ɪ', 's'], water: ['w', 'ɔ', 't', 'ə'],
-  blue: ['b','l','uː'], green: ['g','r','iː','n'], yellow: ['j','ɛ','l','əʊ'],
+  my: ['m','aɪ'], is: ['ɪ','z'], blue: ['b','l','uː'], green: ['g','r','iː','n'], yellow: ['j','ɛ','l','əʊ'],
   orange: ['ɒ','r','ɪ','n','dʒ'], pink: ['p','ɪ','ŋ','k'], purple: ['p','ɜː','p','ə','l'],
   brown: ['b','r','aʊ','n'], black: ['b','l','æ','k'], white: ['w','aɪ','t'],
   cat: ['k','æ','t'], bird: ['b','ɜː','d'], fish: ['f','ɪ','ʃ'], horse: ['h','ɔː','s'], mouse: ['m','aʊ','s'],
@@ -135,6 +135,8 @@ function childPartBand(score) {
 function childPronunciationParts(data) {
   const p = data.pronunciation;
   if (p?.status !== 'assessed') return '';
+  const sentenceRecognition = (p.words || []).length > 1 && Number.isFinite(data.contentScore)
+    ? `<div class="pronunciation-content"><b>Rozpoznání celé věty:</b> ${data.contentScore === 100 ? '✓ Věta souhlasí se vzorem.' : '👂 Rozpoznáním věty si nejsem jistá. Výsledky hlásek jsou uvedené zvlášť.'}</div>` : '';
   const rows = (p.words || []).map((word, index) => {
     const key = String(word.word || '').toLowerCase();
     const reference = childReferenceSounds[key];
@@ -160,7 +162,7 @@ function childPronunciationParts(data) {
     }).join('');
     return `<div class="pronunciation-word"><div class="pronunciation-word-title"><b>${esc(word.word)}</b><span class="${band.style}"><small>Výslovnost celého slova</small>${band.text}</span></div>${recognition}${sounds ? `<div class="pronunciation-sounds-heading">Jak zněly jednotlivé hlásky?</div><ul class="pronunciation-sounds" aria-label="Zvuky ve slově ${esc(word.word)}">${sounds}</ul>` : ''}</div>`;
   }).join('');
-  return rows ? `<div class="pronunciation-parts"><b>${data.feedback?.needsPractice === false ? 'Co se povedlo' : 'Co se povedlo a co ještě zkusit'}</b><p class="pronunciation-guide">Porovnávám s britským vzorem. Kartičky ukazují hlásky, ne písmena. Jedna hláska může být napsaná více písmeny, třeba TH.</p>${rows}</div>` : '';
+  return rows ? `<div class="pronunciation-parts"><b>${data.feedback?.needsPractice === false ? 'Co se povedlo' : 'Co se povedlo a co ještě zkusit'}</b><p class="pronunciation-guide">Porovnávám s britským vzorem. Kartičky ukazují hlásky, ne písmena. Jedna hláska může být napsaná více písmeny, třeba TH.</p>${sentenceRecognition}${rows}</div>` : '';
 }
 
 if (typeof module !== 'undefined') module.exports = { encodeAssessmentWav, phoneticProgressScore };
