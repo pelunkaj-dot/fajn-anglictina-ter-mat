@@ -55,6 +55,8 @@ renderStory = function(){
 };
 
 async function recordStoryLine(index){
+  if(lessonBusy) return;
+  setLessonBusy(true);
   const line=currentTopic.story[index];
   const out=document.getElementById(`storyPron-${index}`);
   const btn=document.querySelector(`.storyRole[data-i="${index}"]`);
@@ -75,6 +77,7 @@ async function recordStoryLine(index){
       out.innerHTML='<div class="kid-feedback try">🎙️ Hlas se teď nepodařilo zkontrolovat. Repliku můžeš zkusit později.</div>';
     }
   }finally{
+    setLessonBusy(false);
     btn.disabled=false;
     btn.textContent="🎙️ Řekni repliku";
   }

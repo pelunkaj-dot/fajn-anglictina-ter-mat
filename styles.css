@@ -404,3 +404,9 @@ button,input{font:inherit}.topbar{position:sticky;top:0;z-index:10;display:flex;
 .pronunciation-sound small{font-size:12px;line-height:1.35;color:#554c45}
 .pronunciation-word-title>span{display:grid;gap:3px;font-size:14px}
 .pronunciation-word-title>span small{font-size:12px;color:#554c45}
+
+.path .step{cursor:pointer;font-family:inherit;color:inherit;transition:background .15s}
+.path .step:hover:not(:disabled){background:#eaf5ff}
+.path .step:focus-visible{outline:3px solid #267fca;outline-offset:2px}
+.path .step:disabled{cursor:wait;opacity:.65}
+@media(max-width:650px){.path{display:flex;overflow-x:auto;padding:4px 2px}.path .step{display:block;flex:0 0 130px}}

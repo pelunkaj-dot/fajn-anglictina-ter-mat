@@ -51,6 +51,8 @@ renderLearn = function(){
 };
 
 async function recordYoungWord(expected){
+  if(lessonBusy) return;
+  setLessonBusy(true);
   const btn=document.getElementById("sayWord");
   const out=document.getElementById("wordPronResult");
   const previous=document.getElementById("previousWord");
@@ -84,6 +86,7 @@ async function recordYoungWord(expected){
       out.innerHTML='<div class="kid-feedback try">🎙️ Teď se mi nepodařilo hlas zkontrolovat. Zkus to ještě jednou.</div>';
     }
   }finally{
+    setLessonBusy(false);
     if(previous) previous.disabled=currentIndex===0;
     if(next) next.disabled=false;
     btn.disabled=false;

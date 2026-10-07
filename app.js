@@ -7,6 +7,8 @@ let currentTopic = null;
 let currentStage = 0;
 let currentIndex = 0;
 let quizScore = 0;
+let lessonBusy = false;
+const lessonPositions = new Map();
 let mediaRecorder = null;
 let chunks = [];
 
@@ -89,7 +91,29 @@ function openTopic(id){
 function pathHtml(){
   const labels=["1. Nauč mě to","2. Poznám","3. Mluvím","4. Příběh","5. Ověřím si"];
   const ts=topicState(currentTopic.id);
-  return `<div class="path">${labels.map((x,i)=>`<div class="step ${i===currentStage?"active":""} ${ts.stages[i]?"done":""}">${ts.stages[i]?"✓ ":""}${x}</div>`).join("")}</div>`;
+  return `<nav class="path" aria-label="Části lekce">${labels.map((x,i)=>`<button type="button" data-stage="${i}" class="step ${i===currentStage?"active":""} ${ts.stages[i]?"done":""}" ${i===currentStage?'aria-current="step"':''} ${lessonBusy?'disabled':''}>${ts.stages[i]?"✓ ":""}${x}</button>`).join("")}</nav>`;
+}
+function navigateLessonStage(stage){
+  if(lessonBusy || !Number.isInteger(stage) || stage<0 || stage>4 || stage===currentStage) return;
+  const answeredQuiz=currentStage===4 && document.getElementById("feedback")?.classList.contains("ok");
+  lessonPositions.set(`${currentTopic.id}:${currentStage}`,{index:currentIndex+(answeredQuiz?1:0),quizScore});
+  const position=lessonPositions.get(`${currentTopic.id}:${stage}`);
+  currentStage=stage;
+  currentIndex=position?.index || 0;
+  quizScore=stage===4 ? position?.quizScore || 0 : 0;
+  if("speechSynthesis" in window) window.speechSynthesis.cancel();
+  renderStage();
+}
+function setLessonBusy(busy){
+  lessonBusy=busy;
+  document.querySelectorAll(".path .step, #backHome, #homeBtn, #nextStage").forEach(button=>button.disabled=busy);
+}
+function scheduleLessonAdvance(action,delay){
+  const panel=document.querySelector(".panel");
+  const topic=currentTopic,stage=currentStage,index=currentIndex;
+  return setTimeout(()=>{
+    if(panel?.isConnected && currentTopic===topic && currentStage===stage && currentIndex===index) action();
+  },delay);
 }
 function shell(body){
   app.innerHTML=`
@@ -106,12 +130,11 @@ function shell(body){
   document.getElementById("backHome").addEventListener("click",renderHome);
   const backToWords=document.getElementById("backToWords");
   if(backToWords) backToWords.onclick=()=>{
-    // Do not interrupt an answer that is already advancing after its feedback.
-    if(document.getElementById("feedback")?.classList.contains("ok")) return;
     currentStage=0;
     currentIndex=currentTopic.words.length-1;
     renderStage();
   };
+  document.querySelectorAll(".path [data-stage]").forEach(button=>button.onclick=()=>navigateLessonStage(Number(button.dataset.stage)));
   refreshStats();
 }
 function renderStage(){
@@ -131,8 +154,10 @@ function navButton(label="Pokračovat"){
 }
 
 async function speak(text){
+  const panel=document.querySelector(".panel");
   try{
     const res=await fetch(API_TTS,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({text,lang:"en",voice:"english-female",speed:1.0})});
+    if(panel && !panel.isConnected) return;
     if(!res.ok) throw new Error();
     const blob=await res.blob();
     const url=URL.createObjectURL(blob);
@@ -140,6 +165,7 @@ async function speak(text){
     audio.onended=()=>URL.revokeObjectURL(url);
     await audio.play();
   }catch{
+    if(panel && !panel.isConnected) return;
     if("speechSynthesis" in window){
       speechSynthesis.cancel();
       const u=new SpeechSynthesisUtterance(text);u.lang="en-GB";u.rate=.82;speechSynthesis.speak(u);
@@ -192,7 +218,7 @@ function renderRecognize(){
     const fb=document.getElementById("feedback");
     if(btn.dataset.cz===w.cz){
       fb.className="feedback ok";fb.textContent="Ano! Přesně.";
-      setTimeout(()=>{
+      scheduleLessonAdvance(()=>{
         if(currentIndex<currentTopic.words.length-1){currentIndex++;renderRecognize();}
         else nextStage();
       },550);
@@ -283,7 +309,7 @@ function renderQuiz(){
     <div id="feedback"></div>`);
   document.querySelectorAll(".option").forEach(btn=>btn.onclick=()=>{
     const fb=document.getElementById("feedback");
-    if(btn.dataset.cz===w.cz){quizScore++;fb.className="feedback ok";fb.textContent="Správně.";setTimeout(()=>{currentIndex++;renderQuiz();},450);}
+    if(btn.dataset.cz===w.cz){quizScore++;fb.className="feedback ok";fb.textContent="Správně.";scheduleLessonAdvance(()=>{currentIndex++;renderQuiz();},450);}
     else{fb.className="feedback bad";fb.textContent="Ne. Zkus jinou možnost.";}
   });
 }

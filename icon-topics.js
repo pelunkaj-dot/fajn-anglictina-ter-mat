@@ -30,7 +30,7 @@ renderRecognize=function(){
     const fb=document.getElementById("feedback");
     if(btn.dataset.cz===w.cz){
       fb.className="feedback ok"; fb.textContent="Ano! Přesně.";
-      setTimeout(()=>{if(currentIndex<currentTopic.words.length-1){currentIndex++;renderRecognize();}else nextStage();},550);
+      scheduleLessonAdvance(()=>{if(currentIndex<currentTopic.words.length-1){currentIndex++;renderRecognize();}else nextStage();},550);
     }else{
       fb.className="feedback bad"; fb.textContent="🙂 Zkus jiný obrázek.";
       speak(w.en);

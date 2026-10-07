@@ -52,6 +52,8 @@ renderSpeak = function(){
 };
 
 recordPronunciation = async function(expected){
+  if(lessonBusy) return;
+  setLessonBusy(true);
   const btn=document.getElementById("record");
   const out=document.getElementById("pronResult");
   try{
@@ -85,6 +87,7 @@ recordPronunciation = async function(expected){
       if(next) next.onclick=()=>{if(currentIndex<currentTopic.sentences.length-1){currentIndex++;renderSpeak();}else nextStage();};
     }
   }finally{
+    setLessonBusy(false);
     btn.disabled=false;
     btn.innerHTML='<span class="action-icon">🎙️</span><span>Řeknu to</span>';
   }
@@ -128,7 +131,7 @@ renderQuiz = function(){
       <div class="visual-options quiz-picture-options">${choices.map(c=>`<button class="visual-option quiz-picture-option" data-a="${esc(c.en)}">${smallVisual(currentTopic,c,true)}<strong>${esc(c.cz)}</strong></button>`).join("")}</div>
       <div id="feedback"></div>`);
     document.getElementById("quizListen").onclick=()=>speak(w.en);
-    setTimeout(()=>speak(w.en),250);
+    scheduleLessonAdvance(()=>speak(w.en),250);
   }
 
   document.querySelectorAll("[data-a]").forEach(btn=>btn.onclick=()=>{
@@ -137,7 +140,7 @@ renderQuiz = function(){
       quizScore++;
       kidSound("success"); fb.className="feedback ok"; fb.textContent="⭐ Správně!";
       document.querySelectorAll("[data-a]").forEach(x=>x.disabled=true);
-      setTimeout(()=>{currentIndex++;renderQuiz();},550);
+      scheduleLessonAdvance(()=>{currentIndex++;renderQuiz();},550);
     }else{
       kidSound("try"); btn.disabled=true;
       fb.className="feedback bad"; fb.textContent="🙂 Zkus jinou možnost.";

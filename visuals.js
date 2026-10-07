@@ -44,7 +44,7 @@ renderRecognize = function(){
     const fb=document.getElementById('feedback');
     if(btn.dataset.cz===w.cz){
       fb.className='feedback ok'; fb.textContent='Ano! Přesně.';
-      setTimeout(()=>{
+      scheduleLessonAdvance(()=>{
         if(currentIndex<currentTopic.words.length-1){currentIndex++;renderRecognize();}
         else nextStage();
       },550);
