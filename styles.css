@@ -427,3 +427,15 @@ button,input{font:inherit}.topbar{position:sticky;top:0;z-index:10;display:flex;
 .recognition-card .visual-option{grid-template-columns:1fr;justify-items:center}
 .recognition-card .mini-picture{width:min(180px,100%)}
 .recognition-card .mini-picture img{width:100%;height:auto;object-fit:contain}
+
+.app.picture-lesson{margin-top:12px}
+.picture-lesson .lesson-head{align-items:center;margin-bottom:12px}
+.picture-lesson .lesson-title h1{font-size:28px}
+.picture-lesson .lesson-title p{margin:5px 0}
+.picture-lesson .panel{padding:18px}
+.picture-lesson .panel h2,.picture-lesson .mini-guide{display:none}
+.picture-lesson .recognition-card{padding:4px}
+.picture-lesson .listen-picture{min-height:90px;padding:10px 22px;margin:0 auto 18px}
+.picture-lesson .listen-picture svg{width:48px;height:48px}
+.picture-lesson .body-picture.compact{width:160px}
+@media(max-width:650px){.picture-lesson .lesson-head{flex-direction:row}.picture-lesson .lesson-title h1{font-size:24px}.picture-lesson .lesson-title p{font-size:12px}.picture-lesson .panel{padding:12px}.picture-lesson .body-picture.compact{width:130px}}

@@ -116,6 +116,7 @@ function scheduleLessonAdvance(action,delay){
   },delay);
 }
 function shell(body){
+  app.classList?.toggle("picture-lesson",currentStage===1);
   app.innerHTML=`
     <div class="lesson-head">
       <button class="back" id="backHome">← Témata</button>
