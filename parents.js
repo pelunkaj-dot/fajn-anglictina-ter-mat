@@ -153,5 +153,21 @@ function validateCourseBackup(backup){
   for(const topic of FAJN_DATA.topics){const data=restored.topics[topic.id];if(data&&(!Array.isArray(data.stages)||data.stages.length!==5||data.stages.some(v=>typeof v!=='boolean')))throw new Error('invalid-backup');}
   if(restored.learning&&(restored.learning.version!==1||!restored.learning.words||typeof restored.learning.words!=='object'||Array.isArray(restored.learning.words)))throw new Error('invalid-backup');
   if(restored.learning)for(const [key,p] of Object.entries(restored.learning.words)){if(!FAJN_DATA.topics.some(t=>t.words.some(w=>key===`${t.id}/${w.en.toLowerCase()}`))||!p||typeof p!=="object"||Array.isArray(p))throw new Error("invalid-backup");for(const field of ["recognitionAttempts","independentCorrect","helpedCorrect","wrongChoices","recognitionStreak","speechAttempts","phoneticAttempts","speechStreak","lastPracticed"])if(p[field]!==undefined&&(!Number.isFinite(p[field])||p[field]<0))throw new Error("invalid-backup");if(p.issues&&(!Array.isArray(p.issues)||p.issues.some(i=>!i||typeof i!=="object")))throw new Error("invalid-backup");}
+  if(restored.course){
+    const c=restored.course,object=v=>v&&typeof v==='object'&&!Array.isArray(v);
+    if(c.version!==1||![1,2,3].includes(c.level)||!object(c.topics)||!object(c.evidence)||!object(c.games)||typeof courseUnits!=='function')throw new Error('invalid-backup');
+    for(const [id,levels] of Object.entries(c.topics)){
+      if(!FAJN_DATA.topics.some(t=>t.id===id)||!object(levels))throw new Error('invalid-backup');
+      for(const [level,data]of Object.entries(levels))if(!['2','3'].includes(level)||!object(data)||!Array.isArray(data.stages)||data.stages.length!==5||data.stages.some(v=>typeof v!=='boolean'))throw new Error('invalid-backup');
+    }
+    for(const [key,p]of Object.entries(c.evidence)){
+      const [id,level,unitId,...rest]=key.split('/'),topic=FAJN_DATA.topics.find(t=>t.id===id);
+      if(rest.length||!topic||!['1','2','3'].includes(level)||![...courseUnits(topic,Number(level)),...courseStory(topic,Number(level))].some(u=>u.id===unitId)||!object(p))throw new Error('invalid-backup');
+      for(const field of ['listens','independent','helped','mistakes','streak','speechAttempts','phoneticAttempts','skipped','at'])if(p[field]!==undefined&&(!Number.isFinite(p[field])||p[field]<0))throw new Error('invalid-backup');
+      for(const field of ['review','speechOk','speechReview','speechHelped','contentOk'])if(p[field]!==undefined&&typeof p[field]!=='boolean')throw new Error('invalid-backup');
+      if(p.tip!==undefined&&typeof p.tip!=='string')throw new Error('invalid-backup');
+    }
+    for(const [key,g]of Object.entries(c.games)){const [id,level,...rest]=key.split('/');if(rest.length||!FAJN_DATA.topics.some(t=>t.id===id)||!['1','2','3'].includes(level)||!object(g)||!Number.isFinite(g.plays)||g.plays<0||!Number.isFinite(g.best)||g.best<0||g.best>8)throw new Error('invalid-backup');}
+  }
   return restored;
 }

@@ -33,7 +33,7 @@ async function speechAsWav(blob) {
   } finally { await context.close(); }
 }
 
-async function assessChildSpeech(blob, expected) {
+async function assessChildSpeech(blob, expected, responseGroup=null) {
   const form = new FormData();
   const extension = blob.type.includes('mp4') ? 'mp4' : blob.type.includes('ogg') ? 'ogg' : 'webm';
   form.append('audio', blob, `audio.${extension}`);
@@ -41,10 +41,11 @@ async function assessChildSpeech(blob, expected) {
   // Preserve the British pronunciation used by this course.
   form.append('language', 'en-GB');
   form.append('phoneticAssessment', 'true');
+  if(responseGroup)form.append('responseGroup',responseGroup);
   try { form.append('audioWav', await speechAsWav(blob), 'assessment.wav'); }
   catch { /* The server returns an honest content-only fallback if conversion is unavailable. */ }
   const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), 24000);
+  const timer = setTimeout(() => controller.abort(), responseGroup?30000:24000);
   try {
     const response = await fetch(API_PRON, { method: 'POST', body: form, signal: controller.signal });
     const data = await response.json();
