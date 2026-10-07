@@ -98,7 +98,7 @@ function answerYoungGame(btn,q){
     kidSound("success");
     btn.classList.add("correct");
     all.forEach(x=>x.disabled=true);
-    document.getElementById("gameFeedback").innerHTML=`<div class="feedback ok">⭐ Správně! ${gain>1?`Bonus +${gain}`:""}</div>`;
+    document.getElementById("gameFeedback").innerHTML=`<div class="feedback ok">⭐ Správně! ${gain>1?`Bonus: +${gain}`:""}</div>`;
     setTimeout(()=>{game.round++;renderAdventure();},650);
   }else{
     game.combo=0;
