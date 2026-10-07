@@ -114,55 +114,41 @@ async function recordGameWord(q){
   const btn=document.getElementById("gameMic");
   const out=document.getElementById("gameFeedback");
   try{
-    const stream=await navigator.mediaDevices.getUserMedia({audio:true});
-    const localChunks=[];
-    const recorder=new MediaRecorder(stream);
-    recorder.ondataavailable=e=>{ if(e.data.size) localChunks.push(e.data); };
-    recorder.onstop=async()=>{
-      stream.getTracks().forEach(t=>t.stop());
-      const blob=new Blob(localChunks,{type:"audio/webm"});
-      const fd=new FormData();
-      fd.append("audio",blob,"audio.webm");
-      fd.append("expectedText",q.answer);
-      fd.append("language","en-GB");
-      out.innerHTML='<div class="feedback">👂 Poslouchám…</div>';
-      try{
-        const res=await fetch(API_PRON,{method:"POST",body:fd});
-        const data=await res.json();
-        if(!res.ok) throw new Error(data.error||"Chyba");
-        const score=Number(data.score)||0;
-        if(score>=60){
-          game.combo++;
-          game.bestCombo=Math.max(game.bestCombo,game.combo);
-          const gain=score>=80?3:2;
-          game.score+=gain;
-          kidSound(score>=80?"reward":"success");
-          out.innerHTML=`<div class="voice-game-result goodvoice"><div>🌟</div><strong>${score>=80?"Paráda!":"Dobře!"}</strong><span>Brána se otevřela.</span></div>`;
-          setTimeout(()=>{game.round++;renderAdventure();},900);
-        }else{
-          game.combo=0;
-          kidSound("try");
-          out.innerHTML='<div class="voice-game-result tryvoice"><div>👂</div><strong>Ještě jednou.</strong><span>Poslechni vzor a zkus to znovu.</span></div>';
-          speak(q.answer);
-          btn.disabled=false;
-          btn.innerHTML="<span>🎙️</span><b>Řeknu to</b>";
-        }
-      }catch(err){
-        out.innerHTML='<div class="feedback bad">🎙️ Mikrofon teď zlobí.<div class="controls"><button class="btn" id="skipGameVoice">Pokračovat bez mikrofonu →</button></div></div>';
-        btn.disabled=false;
-        btn.innerHTML="<span>🎙️</span><b>Řeknu to</b>";
-        const skip=document.getElementById("skipGameVoice");
-        if(skip) skip.onclick=()=>{game.combo=0;game.round++;renderAdventure();};
-      }
-    };
-    recorder.start();
-    btn.disabled=true;
-    btn.innerHTML="<span class=\"recording-dot\">🔴</span><b>Mluv teď</b>";
-    out.innerHTML='<div class="feedback">🎙️ Poslouchám tvůj hlas…</div>';
-    setTimeout(()=>{ if(recorder.state==="recording") recorder.stop(); },2200);
+    const blob=await captureChildSpeech({button:btn,out,maxMs:3400,minMs:350,silenceMs:650});
+    const fd=new FormData();
+    fd.append("audio",blob,"audio.webm");
+    fd.append("expectedText",q.answer);
+    fd.append("language","en-GB");
+
+    const res=await fetch(API_PRON,{method:"POST",body:fd});
+    const data=await res.json();
+    if(!res.ok) throw new Error(data.error||"Chyba");
+
+    const score=Number(data.score)||0;
+    if(score>=60){
+      game.combo++;
+      game.bestCombo=Math.max(game.bestCombo,game.combo);
+      const gain=score>=80?3:2;
+      game.score+=gain;
+      kidSound(score>=80?"reward":"success");
+      out.innerHTML=`<div class="voice-game-result goodvoice"><div>🌟</div><strong>${score>=80?"Paráda!":"Dobře!"}</strong><span>Brána se otevřela.</span></div>`;
+      setTimeout(()=>{game.round++;renderAdventure();},900);
+    }else{
+      game.combo=0;
+      kidSound("try");
+      out.innerHTML='<div class="voice-game-result tryvoice"><div>👂</div><strong>Ještě jednou.</strong><span>Poslechni vzor a zkus to znovu.</span></div>';
+      speak(q.answer);
+    }
   }catch(err){
-    out.innerHTML='<div class="feedback bad">🎙️ Mikrofon není dostupný.<div class="controls"><button class="btn" id="skipGameVoice">Pokračovat bez mikrofonu →</button></div></div>';
-    const skip=document.getElementById("skipGameVoice");
-    if(skip) skip.onclick=()=>{game.combo=0;game.round++;renderAdventure();};
+    if(err?.code==="no-speech"){
+      out.innerHTML='<div class="voice-game-result tryvoice"><div>👂</div><strong>Neslyšela jsem tě.</strong><span>Zkus to ještě jednou.</span></div>';
+    }else{
+      out.innerHTML='<div class="feedback bad">🎙️ Mikrofon není dostupný.<div class="controls"><button class="btn" id="skipGameVoice">Pokračovat bez mikrofonu →</button></div></div>';
+      const skip=document.getElementById("skipGameVoice");
+      if(skip) skip.onclick=()=>{game.combo=0;game.round++;renderAdventure();};
+    }
+  }finally{
+    btn.disabled=false;
+    btn.innerHTML="<span>🎙️</span><b>Řeknu to</b>";
   }
 }
