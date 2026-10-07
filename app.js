@@ -61,7 +61,7 @@ function renderHome(){
       <div class="emoji">${topic.emoji}</div>
       <h3>${esc(topic.title)}</h3>
       <p>${esc(topic.cz)}</p>
-      <div class="status">${ts.mastered ? "🏅 Umím" : done===5 ? "✅ Prošel/a" : done ? `⭐ ${done}/5 kroků` : "Začít"}</div>`;
+      <div class="status">${ts.mastered ? "🏅 Umím" : done===5 ? "✅ Dokončeno" : done ? `⭐ ${done}/5 kroků` : "Začít"}</div>`;
     card.addEventListener("click",()=>openTopic(topic.id));
     topics.appendChild(card);
   }
@@ -142,7 +142,7 @@ function renderLearn(){
   const w=currentTopic.words[currentIndex];
   shell(`
     <h2>👋 Nauč mě to</h2>
-    <p class="mini">Nejdřív slovo slyš, podívej se na význam a řekni si ho nahlas. Nespěcháme.</p>
+    <p class="mini">Podívej se na obrázek, poslechni si slovo a pak ho řekni nahlas.</p>
     <div class="word-card">
       ${currentTopic.id==="colours" ? colorVisualHtml(w) : ""}
       <div class="bigword">${esc(w.en)}</div>
@@ -165,7 +165,7 @@ function renderRecognize(){
   shuffle(choices);
   shell(`
     <h2>👀 Poznám</h2>
-    <p class="mini">Vyber český význam. Po chybě můžeš zkusit znovu.</p>
+    <p class="mini">Poslechni si slovo a vyber správný význam.</p>
     <div class="word-card">
       <button class="btn speak" id="listen">🔊</button>
       <div class="bigword">${esc(w.en)}</div>
@@ -188,7 +188,7 @@ function renderRecognize(){
         else nextStage();
       },550);
     }else{
-      fb.className="feedback bad";fb.textContent="Ještě ne. Poslechni si slovo a zkus to znovu.";
+      fb.className="feedback bad";fb.textContent="Ještě ne. Poslechni si slovo a zkus jinou možnost.";
       speak(w.en);
     }
   });
