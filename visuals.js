@@ -30,12 +30,11 @@ renderRecognize = function(){
   shuffle(choices);
   shell(`
     <h2>👀 Poznám</h2>
-    <p class="mini">Klikni na obrázek, který patří ke slovu.</p>
-    <div class="word-card">
-      <button class="btn speak" id="listen">🔊</button>
-      <div class="bigword">${esc(w.en)}</div>
+    <p class="mini">Poslechni si slovo a vyber obrázek.</p>
+    <div class="word-card recognition-card">
+      ${recognitionListenControl()}
       <div class="visual-options">
-        ${choices.map(c=>`<button class="visual-option picture-choice" data-cz="${esc(c.cz)}"><span class="mini-picture"><img src="assets/${currentTopic.id}/${c.en}.svg" alt=""></span><strong>${esc(c.cz)}</strong></button>`).join('')}
+        ${choices.map(c=>`<button class="visual-option picture-choice" data-cz="${esc(c.cz)}"><span class="mini-picture"><img src="assets/${currentTopic.id}/${c.en}.svg" alt=""></span></button>`).join('')}
       </div>
       <div id="feedback"></div>
     </div>`);

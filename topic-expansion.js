@@ -7,20 +7,9 @@ function numberVisual(word,compact=false){
 }
 
 function bodyVisual(word,compact=false){
-  const p=word.part;
-  const parts=["head","eyes","ears","nose","mouth","hands","knees","feet"];
-  const cls=x=>x===p?"body-part active":"body-part";
-  return `<div class="${compact?"body-visual compact":"body-visual"}" aria-label="${esc(word.cz)}">
-    <div class="${cls("head")} body-head"></div>
-    <div class="${cls("eyes")} body-eyes">••</div>
-    <div class="${cls("ears")} body-ears">◖ ◗</div>
-    <div class="${cls("nose")} body-nose">▲</div>
-    <div class="${cls("mouth")} body-mouth">⌣</div>
-    <div class="body-torso"></div>
-    <div class="${cls("hands")} body-hands"><span></span><span></span></div>
-    <div class="${cls("knees")} body-knees"><span></span><span></span></div>
-    <div class="${cls("feet")} body-feet"><span></span><span></span></div>
-  </div>`;
+  const part=word.part||word.en;
+  if(!["head","eyes","ears","nose","mouth","hands","knees","feet"].includes(part)) return "";
+  return `<div class="body-picture${compact?" compact":""}"><img src="assets/body/${part}.webp" alt="${esc(word.cz||part)}" width="512" height="512"></div>`;
 }
 
 function familyVisual(word,compact=false){
@@ -47,11 +36,10 @@ renderRecognize = function(){
   shell(`
     <h2>👀 Poznám</h2>
     <div class="young-instruction mini-guide"><div><span>🔊</span><b>Poslechni</b></div><div class="instruction-arrow">→</div><div><span>👆</span><b>Ukaž</b></div></div>
-    <div class="word-card">
-      <button class="btn speak" id="listen">🔊 Poslechni</button>
-      <div class="bigword">${esc(w.en)}</div>
+    <div class="word-card recognition-card">
+      ${recognitionListenControl()}
       <div class="visual-options topic-visual-options">
-        ${choices.map(c=>`<button class="visual-option topic-choice" data-cz="${esc(c.cz)}">${visual(c)}<strong>${esc(c.cz)}</strong></button>`).join("")}
+        ${choices.map(c=>`<button class="visual-option topic-choice" data-cz="${esc(c.cz)}">${visual(c)}</button>`).join("")}
       </div>
       <div id="feedback"></div>
     </div>`);

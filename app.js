@@ -194,20 +194,23 @@ function renderLearn(){
   };
 }
 
+function recognitionListenControl(){
+  return `<button class="listen-picture" id="listen" aria-label="Poslechnout slovo"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M12 25h11l15-12v38L23 39H12z" fill="currentColor"/><path d="M45 23c6 5 6 13 0 18M51 15c12 10 12 24 0 34" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></svg><span>Poslechni</span></button>`;
+}
+
 function renderRecognize(){
   const w=currentTopic.words[currentIndex];
   const choices=[w,...shuffle(currentTopic.words.filter(x=>x!==w)).slice(0,3)];
   shuffle(choices);
   shell(`
     <h2>👀 Poznám</h2>
-    <p class="mini">Poslechni si slovo a vyber správný význam.</p>
-    <div class="word-card">
-      <button class="btn speak" id="listen">🔊</button>
-      <div class="bigword">${esc(w.en)}</div>
+    <p class="mini">Poslechni si slovo a vyber obrázek.</p>
+    <div class="word-card recognition-card">
+      ${recognitionListenControl()}
       ${currentTopic.id==="colours" ? '<p class="mini" style="text-align:center">Klikni na správnou barvu.</p>' : ""}
       <div class="${currentTopic.id==="colours" ? "color-options" : "options"}">
         ${choices.map(c=> currentTopic.id==="colours"
-          ? `<button class="color-option" data-cz="${esc(c.cz)}" aria-label="${esc(c.cz)}"><span class="swatch" style="background:${c.color};${c.en==="white"?"border:2px solid #ddd;":""}"></span><strong>${esc(c.cz)}</strong></button>`
+          ? `<button class="color-option" data-cz="${esc(c.cz)}" aria-label="${esc(c.cz)}"><span class="swatch" style="background:${c.color};${c.en==="white"?"border:2px solid #ddd;":""}"></span></button>`
           : `<button class="option" data-cz="${esc(c.cz)}">${esc(c.cz)}</button>`
         ).join("")}
       </div>

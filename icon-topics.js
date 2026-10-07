@@ -19,10 +19,9 @@ renderRecognize=function(){
   shell(`
     <h2>👀 Poznám</h2>
     <div class="young-instruction mini-guide"><div><span>🔊</span><b>Poslechni</b></div><div class="instruction-arrow">→</div><div><span>👆</span><b>Ukaž</b></div></div>
-    <div class="word-card">
-      <button class="btn speak" id="listen">🔊 Poslechni</button>
-      <div class="bigword">${esc(w.en)}</div>
-      <div class="visual-options icon-choice-grid">${choices.map(c=>`<button class="visual-option icon-choice" data-cz="${esc(c.cz)}">${iconTopicVisual(c,true)}<strong>${esc(c.cz)}</strong></button>`).join("")}</div>
+    <div class="word-card recognition-card">
+      ${recognitionListenControl()}
+      <div class="visual-options icon-choice-grid">${choices.map(c=>`<button class="visual-option icon-choice" data-cz="${esc(c.cz)}">${iconTopicVisual(c,true)}</button>`).join("")}</div>
       <div id="feedback"></div>
     </div>`);
   document.getElementById("listen").onclick=()=>speak(w.en);
