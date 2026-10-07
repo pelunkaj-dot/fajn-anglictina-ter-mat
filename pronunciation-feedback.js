@@ -73,7 +73,7 @@ function childPronunciationHtml(data, game = false) {
 // British responses include phoneme scores but no names. Label only known,
 // unambiguous reference sequences when their lengths match the response.
 const childReferenceSounds = {
-  frog: ['f', 'r', 'ɒ', 'g'], red: ['r', 'ɛ', 'd'],
+  dad: ['d', 'æ', 'd'], frog: ['f', 'r', 'ɒ', 'g'], red: ['r', 'ɛ', 'd'],
   rabbit: ['r', 'æ', 'b', 'ɪ', 't'], dog: ['d', 'ɒ', 'g'],
   three: ['θ', 'r', 'i'], think: ['θ', 'ɪ', 'ŋ', 'k'],
   this: ['ð', 'ɪ', 's'], water: ['w', 'ɔ', 't', 'ə'],
@@ -102,7 +102,7 @@ function childPronunciationParts(data) {
     const band = childPartBand(wordIssues.some(isSubstitution) ? 0 : Math.min(word.accuracyScore, ...phonemes.map(s => s.accuracyScore).filter(Number.isFinite), ...issueScores));
     const content = data.words?.[index];
     const recognition = content && String(content.word).toLowerCase() === key
-      ? `<div class="pronunciation-content">${content.ok ? '✓ Správné slovo' : '👂 Zkus vyslovit toto slovo'}</div>` : '';
+      ? `<div class="pronunciation-content">${content.ok ? '✓ Správné slovo' : '👂 Rozpoznáním si nejsem jistá'}</div>` : '';
     const sounds = phonemes.map((phoneme, position) => {
       if (!Number.isFinite(phoneme.accuracyScore)) return '';
       const sound = phoneme.phoneme || (reference?.length === phonemes.length ? reference[position] : null);
