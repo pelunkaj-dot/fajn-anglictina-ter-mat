@@ -89,7 +89,10 @@ renderAdventure = function(){
 
 function answerYoungGame(btn,q){
   const all=[...document.querySelectorAll(".game-option")];
+  if(btn.disabled||all.every(button=>button.disabled))return;
   const ok=btn.dataset.a===q.answer;
+  if(q.type==="picturePick"&&typeof recordPictureChoice==="function")recordPictureChoice(game.topic,q.word,ok,!q.helped);
+  if(!ok)q.helped=true;
   if(ok){
     game.combo++;
     game.bestCombo=Math.max(game.bestCombo,game.combo);
