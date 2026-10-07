@@ -18,6 +18,7 @@
 6. Běžné odpovědi jsou předem jazykově zkontrolované varianty téhož významu. Server nejprve rozpozná řeč nezávisle, zvolí odpovídající variantu a teprve tu foneticky posoudí. Nejde o neomezené hodnocení libovolné volné odpovědi.
 7. Nápověda ani opakované kliknutí nezískají bod za samostatný výkon. Nový pokus v kvízu začíná bez staré nápovědy; skutečné obtíže zůstávají uložené.
 8. Nedostupné fonetické hodnocení není špatná výslovnost ani zvládnutá výslovnost. Dítě může pokračovat; rodič vidí neověření a přeskočení.
+   V komunikaci se rozlišuje úspěšná domluva od fonetického odznaku: přesně rozpoznaná samostatná odpověď umožní postup i při slabší hodnocené výslovnosti, ale fonetická obtíž se ponechá k procvičení a nevydá odznak Umím. Dva živé britské vzory (Some water, please. / I feel tired.) ukázaly tuto potřebu v reálném Azure výstupu.
 9. Vyšší úrovně nepřepisují původní postup. Dřívější podrobné výsledky slov se převedou do Objevuji.
 
 ## Jazyk

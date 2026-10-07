@@ -48,7 +48,7 @@ courseTopicMastered=function(topic){
   return ts.stages.every(Boolean)&&ts.lastQuiz?.passed===true&&recognition&&speech;
 };
 function levelInfo(){return COURSE_LEVELS.find(l=>l.id===courseLevel);}
-function levelButtons(){return `<div class="course-levels" role="group" aria-label="Obtížnost">${COURSE_LEVELS.map(l=>`<button type="button" data-level="${l.id}" class="level-button ${l.id===courseLevel?'selected':''}" aria-pressed="${l.id===courseLevel}" ${lessonBusy?'disabled':''}><span>${l.icon}</span><strong>${l.name}</strong><small>${l.description}</small></button>`).join('')}</div>`;}
+function levelButtons(home=false){return `<div class="course-levels ${home?'home-levels':'lesson-levels'}" role="group" aria-label="Obtížnost">${COURSE_LEVELS.map(l=>`<button type="button" data-level="${l.id}" class="level-button ${l.id===courseLevel?'selected':''}" aria-pressed="${l.id===courseLevel}" ${lessonBusy?'disabled':''}><span>${l.icon}</span><strong>${l.name}</strong><small>${l.description}</small></button>`).join('')}</div>`;}
 function bindLevelButtons(){document.querySelectorAll('[data-level]').forEach(button=>button.onclick=()=>switchCourseLevel(Number(button.dataset.level)));}
 function switchCourseLevel(level){
   if(lessonBusy||![1,2,3].includes(level)||level===courseLevel)return;
@@ -68,7 +68,7 @@ shell=function(body){
   originalLevelShell(body);
   const path=document.querySelector('.path');if(path)path.insertAdjacentHTML('beforebegin',levelButtons());bindLevelButtons();
   const subtitle=document.querySelector('.lesson-title p');if(subtitle)subtitle.textContent=`${currentTopic.cz} · ${levelInfo().name} · krok ${currentStage+1} z 5`;
-  const back=document.getElementById('backToWords');if(back)back.onclick=()=>{if(lessonBusy)return;currentStage=0;currentIndex=Math.max(0,courseUnits(currentTopic,courseLevel).length-1);renderStage();};
+  const back=document.getElementById('backToWords');if(back)back.closest('.controls').remove();
 };
 openTopic=function(id){
   if(lessonBusy)return;stopBritishAudio();wordPractice=null;courseGame=null;courseReview=null;
@@ -99,7 +99,7 @@ function courseObjectVisual(object){
 }
 function courseSceneLabel(scene){
   if(scene.situation)return 'Obrázek situace';if(scene.characters)return 'Terezka a Matýsek';
-  return (scene.objects||[]).map(o=>{const t=FAJN_DATA.topics.find(t=>t.id===o.topic),w=t?.words.find(w=>w.en===o.word);return `${o.count||1} × ${w?.cz||o.word}${o.size==='small'?' · malé':o.size==='big'?' · velké':''}`;}).join(', ');
+  return (scene.objects||[]).map(o=>{const t=FAJN_DATA.topics.find(t=>t.id===o.topic),w=t?.words.find(w=>w.en===o.word);return `${o.count||1} × ${o.size?(o.size==='small'?'malá ':'velká '):''}${w?.cz||o.word}`;}).join(', ');
 }
 function courseSceneHtml(scene,compact=false){
   if(scene.situation)return situationVisual(scene,compact);
@@ -160,12 +160,12 @@ function prepareCourseSpeech(unit,stage,context,onDone,visitId=unit.id){
       const evidence=recordCourseSpeech(currentTopic,unit,data);evidence.speechHelped=usedHint;saveState();
       const contentOk=(data.contentScore??data.score)===100;
       if(contentOk&&data.pronunciation?.status==='assessed')courseMarkVisit(stage,visitId);
-      out.innerHTML=childPronunciationHtml(data);
-      if(contentOk){out.innerHTML+=`<p class="communication-result">${context!=='model'?'💬 Rozumím tvé odpovědi. ':''}${usedHint&&context!=='model'?'Teď jsme odpověď zkusili s pomocí.':''}</p>`;}
+      out.innerHTML=(context==='reply'?`<div class="communication-result"><strong>💬 Domluva</strong><p>${contentOk?'Rozumím tvé odpovědi.':'Odpovědí si ještě nejsem jistá. Poslechni si otázku znovu.'}${usedHint?' Odpověď jsme zkusili s pomocí.':''}</p></div><h3 class="assessment-heading">🎙️ Výslovnost</h3>`:'')+childPronunciationHtml(data);
       kidSound(data.feedback.passed?'success':'try');
       const okay=data.feedback.passed===true;
       if(onDone){
-        if(okay){out.innerHTML+='<button class="btn primary" id="courseSpeechDone">Pokračovat →</button>';document.getElementById('courseSpeechDone').onclick=()=>onDone({independent:!usedHint,passed:true,verified:true});}
+        const understoodReply=context==='reply'&&contentOk&&data.pronunciation?.status==='assessed';
+        if(okay||understoodReply){out.innerHTML+=`<button class="btn primary" id="courseSpeechDone">${okay?'Pokračovat':'Pokračovat, výslovnost ještě procvičím'} →</button>`;document.getElementById('courseSpeechDone').onclick=()=>onDone({independent:!usedHint,passed:true,phoneticPassed:okay,verified:true});}
         else{out.innerHTML+='<button class="btn" id="courseSpeechDone">⏭️ Teď přeskočit</button>';document.getElementById('courseSpeechDone').onclick=()=>{evidence.skipped++;saveState();onDone({independent:false,passed:false,verified:data.pronunciation?.status==='assessed'});};}
       }
     }catch(error){out.innerHTML=`<div class="kid-feedback try">👂 ${error?.code==='no-speech'?'Neslyšela jsem tě. Zkus to ještě jednou.':'Hlas se teď nepodařilo ověřit. Můžeš pokračovat a zkusit to později.'}</div>`;if(onDone&&error?.code!=='no-speech'){out.innerHTML+='<button class="btn" id="courseSpeechDone">Pokračovat bez ověření →</button>';document.getElementById('courseSpeechDone').onclick=()=>onDone({independent:false,passed:false,verified:false});}}
@@ -213,7 +213,8 @@ renderQuiz=function(){
   if(!task){
     const result=courseLevelQuizResult(quiz);topicState(currentTopic.id).lastQuiz={...result,at:Date.now()};
     if(result.passed)completeStage(4);saveState();
-    shell(`<div class="quiz-result-visual">${result.passed?'🏆':'🌱'}</div><h2>${result.passed?'Paráda! Ověření se povedlo.':'Hotovo! Ještě něco potrénujeme.'}</h2><p>${result.unverified?'Některé odpovědi se nepodařilo ověřit. Zkusíme je později.':result.passed?'Poslechu rozumíš a odpovědi se ti daří.':'Některé odpovědi potřebovaly pomoc. Příště to zkusíme samostatně.'}</p><div class="controls"><button class="btn primary" id="courseQuizFinish">${result.passed?'Pokračovat →':'👂 Potrénovat'}</button><button class="btn" id="courseQuizRetry">🔊 Zkusit znovu</button><button class="btn" id="courseExit">🏠 Domů</button></div>`);
+    const phoneticReview=quiz.answers.some(a=>a?.passed&&a.phoneticPassed===false);
+    shell(`<div class="quiz-result-visual">${result.passed?'🏆':'🌱'}</div><h2>${result.passed?'Paráda! Ověření se povedlo.':'Hotovo! Ještě něco potrénujeme.'}</h2><p>${result.unverified?'Některé odpovědi se nepodařilo ověřit. Zkusíme je později.':result.passed?'Poslechu rozumíš a odpovědi se ti daří.':'Některé odpovědi potřebovaly pomoc. Příště to zkusíme samostatně.'}${phoneticReview?' Domluva se povedla. Některé zvuky ještě procvičíme.':''}</p><div class="controls"><button class="btn primary" id="courseQuizFinish">${result.passed?'Pokračovat →':'👂 Potrénovat'}</button><button class="btn" id="courseQuizRetry">🔊 Zkusit znovu</button><button class="btn" id="courseExit">🏠 Domů</button></div>`);
     document.getElementById('courseQuizFinish').onclick=result.passed?renderFinish:()=>startCourseReview(currentTopic.id);document.getElementById('courseQuizRetry').onclick=()=>{flow.quiz=null;for(const key of Object.keys(flow.attempts))if(key.startsWith('quiz/'))delete flow.attempts[key];renderQuiz();};document.getElementById('courseExit').onclick=renderHome;return;
   }
   if(task.type==='reply'){
@@ -248,15 +249,17 @@ function renderCourseReview(){
 const previousLevelsHome=renderHome;
 renderHome=function(){
   if(lessonBusy)return;courseGame=null;courseReview=null;courseFlow=null;previousLevelsHome();
-  const hero=document.querySelector('.hero');const levels=document.createElement('section');levels.className='level-home';levels.innerHTML=`<h2>Jakou výpravu si vybereš?</h2>${levelButtons()}<p>Obtížnost můžeš kdykoliv změnit. Každá má vlastní pokrok.</p>`;
+  const hero=document.querySelector('.hero');const levels=document.createElement('section');levels.className='level-home';levels.innerHTML=`<h2>Jakou výpravu si vybereš?</h2>${levelButtons(true)}<p>Obtížnost můžeš kdykoliv změnit. Každá má vlastní pokrok.</p>`;
   if(hero)hero.after(levels);else app.prepend(levels);bindLevelButtons();
   const oldReview=document.querySelector('.practice-home-card');if(oldReview)oldReview.remove();
   if(courseReviewQueue().length){const card=document.createElement('section');card.className='practice-home-card';card.innerHTML='<div><h2>👂 Ještě potrénujeme</h2><p>Krátká výprava za tím, co potřebuje zopakovat.</p></div><button class="btn primary" id="startWordPractice">Pojďme na to →</button>';document.querySelector('.section-title')?.before(card);document.getElementById('startWordPractice').onclick=()=>startCourseReview();}
   document.querySelectorAll('.topic-card').forEach((card,i)=>{if(FAJN_DATA.topics[i]?.situation)card.classList.add('situation-card');});
+  const gameCard=document.getElementById('gameBtn')?.closest('section');if(gameCard){gameCard.querySelector('h2').textContent='Postavíme most!';gameCard.querySelector('p:not(.eyebrow)').textContent='Pomoz Terezce a Matýskovi přejít řeku. Každou odpovědí přidáme kus mostu. Na druhém břehu čeká další výprava.';}
 };
 
 /* A bridge that actually grows: no lives, no penalties, no bonus for guessing.
    Each answer adds a plank. A finish changes the destination and opens a route. */
+function courseGameShell(body){shell(body);document.querySelector('.path')?.remove();const subtitle=document.querySelector('.lesson-title p');if(subtitle)subtitle.textContent=`${currentTopic.cz} · ${levelInfo().name} · herní výprava`;}
 function courseBridgeHtml(round,complete=false){return `<div class="bridge-world ${complete?'bridge-complete':''}" role="img" aria-label="Most: ${Math.min(round,8)} z 8 částí"><svg viewBox="0 0 800 240" aria-hidden="true"><defs><linearGradient id="river" x2="0" y2="1"><stop stop-color="#7dd8f7"/><stop offset="1" stop-color="#3897d6"/></linearGradient></defs><rect width="800" height="240" rx="25" fill="#dbf5ff"/><circle cx="100" cy="55" r="30" fill="#ffdb59"/><path d="M0 180Q90 120 220 180L220 240H0Z M580 180Q700 100 800 170V240H580Z" fill="#64bc7d"/><path d="M220 170Q410 195 580 160V240H220Z" fill="url(#river)"/><path class="river-wave" d="M255 212Q320 194 385 212T520 212" stroke="#d9f8ff" stroke-width="7" fill="none"/>${Array.from({length:8},(_,i)=>`<g class="bridge-plank ${i<round?'built':''}" style="--plank:${i}"><rect x="${215+i*47}" y="158" width="45" height="18" rx="4" fill="${i<round?'#b6753d':'#bed2d6'}"/><path d="M${237+i*47} 159v-40" stroke="${i<round?'#87532e':'#bed2d6'}" stroke-width="5"/></g>`).join('')}<path d="M232 120Q405 140 566 120" stroke="#ae7445" stroke-width="5" fill="none" opacity="${round/8}"/><path d="M665 165v-42l30-18 30 18v42" fill="${complete?'#ffd371':'#bed2d6'}"/><path d="M654 124l41-33 42 33" fill="${complete?'#d96370':'#a5bdc4'}"/><circle cx="695" cy="145" r="10" fill="#fff1b1"/><path d="M755 166v-28m-18 10h35" stroke="${complete?'#46a660':'#bed2d6'}" stroke-width="8" stroke-linecap="round"/></svg><div class="bridge-heroes" style="left:${10+Math.min(round,8)*8}%"><img src="assets/characters/terezka.svg" alt=""><img src="assets/characters/matysek.svg" alt=""></div>${complete?'<div class="bridge-destination">🏡 Dorazili jsme!</div>':''}</div>`;}
 startAdventure=function(){startAdventureFor(currentTopic?.id||FAJN_DATA.topics.find(t=>topicState(t.id).stages.some(Boolean))?.id||'animals');};
 startAdventureFor=function(id){
@@ -271,11 +274,11 @@ renderAdventure=function(){
   const gameChoices=courseChoices(courseUnits(currentTopic,courseLevel),task.unit);
   if(task.type==='reply'&&!task.selected){
     const choices=courseUnits(currentTopic,3).filter(u=>u.prompt===task.unit.prompt);
-    shell(`<h2>🌉 Vyber si a odpověz</h2>${courseBridgeHtml(played.round)}<p>${esc(task.unit.promptCz)}</p><button class="big-action listen-action" id="listen">🔊 Otázka</button>${meaningButtons(choices,true)}<button class="btn" id="courseExit">🏠 Ukončit výpravu</button>`);
+    courseGameShell(`<h2>🌉 Vyber si a odpověz</h2>${courseBridgeHtml(played.round)}<p>${esc(task.unit.promptCz)}</p><button class="big-action listen-action" id="listen">🔊 Otázka</button>${meaningButtons(choices,true)}<button class="btn" id="courseExit">🏠 Ukončit výpravu</button>`);
     document.getElementById('listen').onclick=()=>speak(task.unit.prompt);document.querySelectorAll('[data-personal]').forEach(b=>b.onclick=()=>{task.selected=choices[Number(b.dataset.personal)];renderAdventure();});document.getElementById('courseExit').onclick=renderHome;return;
   }
   const speakingUnit=task.selected||task.unit;
-  shell(`<div class="course-game-heading"><h2>🌉 Postavíme most!</h2><p>${esc(levelInfo().name)} · ${played.round+1}/8</p></div>${courseBridgeHtml(played.round)}<p class="bridge-mission">Každou odpovědí přidáme prkno. Pomoc je vždycky po ruce.</p>${task.type==='reply'?`<p>${esc(speakingUnit.promptCz)}</p>${courseSpeechCard(speakingUnit,'reply')}`:`${recognitionListenControl()}${meaningButtons(gameChoices)}<div id="feedback" role="status"></div>`}<div class="controls"><button class="btn" id="courseExit">🏠 Ukončit výpravu</button></div>`);
+  courseGameShell(`<div class="course-game-heading"><h2>🌉 Postavíme most!</h2><p>${esc(levelInfo().name)} · ${played.round+1}/8</p></div>${courseBridgeHtml(played.round)}<p class="bridge-mission">Každou odpovědí přidáme prkno. Pomoc je vždycky po ruce.</p>${task.type==='reply'?`<p>${esc(speakingUnit.promptCz)}</p>${courseSpeechCard(speakingUnit,'reply')}`:`${recognitionListenControl()}${meaningButtons(gameChoices)}<div id="feedback" role="status"></div>`}<div class="controls"><button class="btn" id="courseExit">🏠 Ukončit výpravu</button></div>`);
   const advance=result=>{if(courseGame!==played)return;if(result?.verified===false)played.unverified++;if(result?.independent)played.independent++;if(task.type==='reply'&&result?.passed)played.spoken++;played.round++;renderAdventure();};
   if(task.type==='reply')prepareCourseSpeech(speakingUnit,1,'reply',advance);
   else{
@@ -289,7 +292,7 @@ renderAdventure=function(){
 renderAdventureFinish=function(){
   const played=courseGame,key=`${played.topic.id}/${played.level}`,previous=state.course.games[key]||{plays:0,best:0};
   if(!played.recorded){previous.plays++;previous.best=Math.max(previous.best,played.independent);previous.last={independent:played.independent,spoken:played.spoken,unverified:played.unverified,at:Date.now()};state.course.games[key]=previous;played.recorded=true;saveState();}
-  shell(`${courseBridgeHtml(8,true)}<h2>🌟 Most stojí!</h2><p>${played.unverified?'Část mluvení ještě ověříme později. Most jsme společně dokončili.':'Terezka a Matýsek přešli řeku. Na druhém břehu čeká další dobrodružství.'}</p><div class="controls"><button class="btn primary" id="courseGameNext">${courseLevel<3?'🌿 Výprava o úroveň výš':'🗺️ Další téma'} →</button><button class="btn" id="courseReplay">🎮 Postavit znovu</button><button class="btn" id="courseExit">🏠 Domů</button></div>`);
+  courseGameShell(`${courseBridgeHtml(8,true)}<h2>🌟 Most stojí!</h2><p>${played.unverified?'Část mluvení ještě ověříme později. Most jsme společně dokončili.':'Terezka a Matýsek přešli řeku. Na druhém břehu čeká další dobrodružství.'}</p><div class="controls"><button class="btn primary" id="courseGameNext">${courseLevel<3?'🌿 Výprava o úroveň výš':'🗺️ Další téma'} →</button><button class="btn" id="courseReplay">🎮 Postavit znovu</button><button class="btn" id="courseExit">🏠 Domů</button></div>`);
   document.getElementById('courseGameNext').onclick=()=>{const id=played.topic.id;if(courseLevel<3){switchCourseLevel(courseLevel+1);startAdventureFor(id);}else{const i=FAJN_DATA.topics.findIndex(t=>t.id===id);startAdventureFor(FAJN_DATA.topics[(i+1)%FAJN_DATA.topics.length].id);}};document.getElementById('courseReplay').onclick=()=>startAdventureFor(played.topic.id);document.getElementById('courseExit').onclick=renderHome;
 };
 
