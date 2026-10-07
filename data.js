@@ -42,7 +42,7 @@ window.FAJN_DATA = {
       ],
       sentences:[
         {en:"I like apples.",cz:"Jablka mi chutnají."},{en:"I drink water.",cz:"Piju vodu."},
-        {en:"This is my bread.",cz:"Tohle je můj chléb."},{en:"The cake is good.",cz:"Dort je dobrý."}
+        {en:"This is bread.",cz:"Tohle je chléb."},{en:"The cake is good.",cz:"Dort je dobrý."}
       ],
       story:[
         {speaker:"Terezka",en:"I am hungry.",cz:"Mám hlad."},
@@ -140,7 +140,7 @@ window.FAJN_DATA = {
       id:"school", title:"School", cz:"Škola", emoji:"🎒",
       words:[
         {en:"school",cz:"škola"},{en:"bag",cz:"taška"},{en:"pencil",cz:"tužka"},{en:"book",cz:"kniha"},
-        {en:"ruler",cz:"pravítko"},{en:"desk",cz:"lavice"},{en:"teacher",cz:"učitel / učitelka"},{en:"bell",cz:"zvonek"}
+        {en:"ruler",cz:"pravítko"},{en:"desk",cz:"lavice"},{en:"teacher",cz:"učitel/učitelka"},{en:"bell",cz:"zvonek"}
       ],
       sentences:[
         {en:"This is my school.",cz:"Tohle je moje škola."},{en:"My pencil is in my bag.",cz:"Moje tužka je v tašce."},
@@ -194,7 +194,7 @@ window.FAJN_DATA = {
         {en:"surprised",cz:"překvapený",visual:"😮"},{en:"tired",cz:"unavený",visual:"😴"},{en:"excited",cz:"nadšený",visual:"🤩"},{en:"bored",cz:"znuděný",visual:"😑"}
       ],
       sentences:[
-        {en:"I am happy.",cz:"Jsem šťastný / šťastná."},{en:"I am tired.",cz:"Jsem unavený / unavená."},
+        {en:"I am happy.",cz:"Jsem šťastný/šťastná."},{en:"I am tired.",cz:"Jsem unavený/unavená."},
         {en:"She is surprised.",cz:"Je překvapená."},{en:"He is excited.",cz:"Je nadšený."}
       ],
       story:[
