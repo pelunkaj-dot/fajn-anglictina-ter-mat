@@ -96,8 +96,10 @@ function childPronunciationParts(data) {
     const key = String(word.word || '').toLowerCase();
     const reference = childReferenceSounds[key];
     const phonemes = word.phonemes || [];
-    const issueScores = (p.issues || []).filter(i => String(i.word).toLowerCase() === key && Number.isFinite(i.accuracyScore)).map(i => i.accuracyScore);
-    const band = childPartBand(Math.min(word.accuracyScore, ...phonemes.map(s => s.accuracyScore).filter(Number.isFinite), ...issueScores));
+    const wordIssues = (p.issues || []).filter(i => String(i.word).toLowerCase() === key);
+    const isSubstitution = i => ['voicing', 'th-substitution', 'vowel-substitution', 'phoneme-substitution'].includes(i?.type);
+    const issueScores = wordIssues.filter(i => Number.isFinite(i.accuracyScore)).map(i => i.accuracyScore);
+    const band = childPartBand(wordIssues.some(isSubstitution) ? 0 : Math.min(word.accuracyScore, ...phonemes.map(s => s.accuracyScore).filter(Number.isFinite), ...issueScores));
     const content = data.words?.[index];
     const recognition = content && String(content.word).toLowerCase() === key
       ? `<div class="pronunciation-content">${content.ok ? '✓ Správné slovo' : '👂 Zkus vyslovit toto slovo'}</div>` : '';
@@ -106,10 +108,10 @@ function childPronunciationParts(data) {
       const sound = phoneme.phoneme || (reference?.length === phonemes.length ? reference[position] : null);
       const label = childSoundLabel(sound) || `${position + 1}. zvuk`;
       const normalizeSound = s => String(s || '').replace(/ɹ/g, 'r').replace(/ɡ/g, 'g');
-      const issue = (p.issues || []).find(i => String(i.word).toLowerCase() === key && sound && normalizeSound(i.expected) === normalizeSound(sound));
+      const issue = wordIssues.find(i => sound && normalizeSound(i.expected) === normalizeSound(sound));
       // Confirmed difficulty must not be hidden by a higher aggregate GB score.
       const score = issue && Number.isFinite(issue.accuracyScore) ? Math.min(phoneme.accuracyScore, issue.accuracyScore) : phoneme.accuracyScore;
-      const result = childPartBand(score);
+      const result = childPartBand(isSubstitution(issue) ? 0 : score);
       return `<li class="pronunciation-sound ${result.style}"><b>${esc(label)}</b><span>${result.text}</span></li>`;
     }).join('');
     return `<div class="pronunciation-word"><div class="pronunciation-word-title"><b>${esc(word.word)}</b><span class="${band.style}">${band.text}</span></div>${recognition}${sounds ? `<ul class="pronunciation-sounds" aria-label="Zvuky ve slově ${esc(word.word)}">${sounds}</ul>` : ''}</div>`;

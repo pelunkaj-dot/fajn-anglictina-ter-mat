@@ -67,3 +67,8 @@ test('Unknown or differently sized phoneme sequences are not assigned guessed le
   assert.match(html, /1\. zvuk/); assert.doesNotMatch(html, /<b>F<\/b>/);
   assert.equal(h.childPronunciationParts({pronunciation:{status:'unavailable',words:[{word:'frog',accuracyScore:100}]}}), '');
 });
+test('Confirmed TH substitution stays a correction even at the middle score threshold', () => {
+  const h=helper();
+  const html=h.childPronunciationParts({pronunciation:{status:'assessed',words:[{word:'this',accuracyScore:85,phonemes:[85,90,95].map(accuracyScore=>({accuracyScore}))}],issues:[{type:'th-substitution',word:'this',expected:'ð',accuracyScore:65}]}});
+  assert.match(html, /<b>TH<\/b><span>👂 Zkus ještě/);
+});
