@@ -79,7 +79,7 @@ function renderParentDashboard(){
     return `<tr>
       <td><strong>${topic.emoji} ${esc(topic.cz)}</strong><small>${esc(topic.title)}</small></td>
       <td>${done}/5</td>
-      <td>${ts.mastered?"🏅 Umím":ts.stages?.every(Boolean)?"✅ Prošel/a":"—"}</td>
+      <td>${ts.mastered?"🏅 Umím":ts.stages?.every(Boolean)?"✅ Dokončeno":"—"}</td>
       <td>${pronunciationLabel(ts.bestPronunciation)}</td>
     </tr>`;
   }).join("");
@@ -92,9 +92,9 @@ function renderParentDashboard(){
     <div class="parent-head">
       <div><p class="eyebrow">PRO RODIČE</p><h2>Jak se dítěti daří</h2></div>
       <div class="parent-summary">
-        <span><b>${mastered}</b><small>témat umí</small></span>
-        <span><b>${completed}</b><small>témat dokončilo</small></span>
-        <span><b>${attempted}</b><small>témat zkusilo</small></span>
+        <span><b>${mastered}</b><small>zvládnutých témat</small></span>
+        <span><b>${completed}</b><small>dokončených témat</small></span>
+        <span><b>${attempted}</b><small>rozpracovaných témat</small></span>
         <span><b>${games.best||0}</b><small>herní rekord</small></span>
       </div>
     </div>
