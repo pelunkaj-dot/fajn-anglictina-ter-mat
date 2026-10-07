@@ -8,7 +8,7 @@ window.FAJN_DATA = {
       ],
       sentences:[
         {en:"It is red.",cz:"Je to červené."},{en:"My bag is blue.",cz:"Moje taška je modrá."},
-        {en:"I like green.",cz:"Mám rád/a zelenou."},{en:"The sun is yellow.",cz:"Slunce je žluté."}
+        {en:"I like green.",cz:"Líbí se mi zelená."},{en:"The sun is yellow.",cz:"Slunce je žluté."}
       ],
       story:[
         {speaker:"Terezka",en:"Look, Matýsek! A rainbow!",cz:"Podívej, Matýsku! Duha!"},
@@ -41,7 +41,7 @@ window.FAJN_DATA = {
         {en:"cheese",cz:"sýr"},{en:"banana",cz:"banán"},{en:"egg",cz:"vejce"},{en:"cake",cz:"dort"}
       ],
       sentences:[
-        {en:"I like apples.",cz:"Mám rád/a jablka."},{en:"I drink water.",cz:"Piju vodu."},
+        {en:"I like apples.",cz:"Jablka mi chutnají."},{en:"I drink water.",cz:"Piju vodu."},
         {en:"This is my bread.",cz:"Tohle je můj chléb."},{en:"The cake is good.",cz:"Dort je dobrý."}
       ],
       story:[
@@ -54,7 +54,7 @@ window.FAJN_DATA = {
     {
       id:"numbers", title:"Numbers", cz:"Čísla", emoji:"🔢",
       words:[
-        {en:"one",cz:"jedna",num:1},{en:"two",cz:"dvě",num:2},{en:"three",cz:"tři",num:3},{en:"four",cz:"čtyři",num:4},
+        {en:"one",cz:"jeden",num:1},{en:"two",cz:"dva",num:2},{en:"three",cz:"tři",num:3},{en:"four",cz:"čtyři",num:4},
         {en:"five",cz:"pět",num:5},{en:"six",cz:"šest",num:6},{en:"seven",cz:"sedm",num:7},{en:"eight",cz:"osm",num:8},{en:"nine",cz:"devět",num:9},{en:"ten",cz:"deset",num:10}
       ],
       sentences:[
@@ -140,7 +140,7 @@ window.FAJN_DATA = {
       id:"school", title:"School", cz:"Škola", emoji:"🎒",
       words:[
         {en:"school",cz:"škola"},{en:"bag",cz:"taška"},{en:"pencil",cz:"tužka"},{en:"book",cz:"kniha"},
-        {en:"ruler",cz:"pravítko"},{en:"desk",cz:"lavice"},{en:"teacher",cz:"učitelka / učitel"},{en:"bell",cz:"zvonek"}
+        {en:"ruler",cz:"pravítko"},{en:"desk",cz:"lavice"},{en:"teacher",cz:"učitel / učitelka"},{en:"bell",cz:"zvonek"}
       ],
       sentences:[
         {en:"This is my school.",cz:"Tohle je moje škola."},{en:"My pencil is in my bag.",cz:"Moje tužka je v tašce."},
@@ -150,7 +150,7 @@ window.FAJN_DATA = {
         {speaker:"Terezka",en:"My bag is ready.",cz:"Moje taška je připravená."},
         {speaker:"Matýsek",en:"I have a book and a pencil.",cz:"Mám knihu a tužku."},
         {speaker:"Terezka",en:"Listen! The bell is ringing.",cz:"Poslouchej! Zvonek zvoní."},
-        {speaker:"Matýsek",en:"Let us go to class.",cz:"Pojďme do třídy."}
+        {speaker:"Matýsek",en:"Let's go to class.",cz:"Pojďme do třídy."}
       ]
     },
     {
@@ -167,7 +167,7 @@ window.FAJN_DATA = {
         {speaker:"Matýsek",en:"Look! The sun is shining.",cz:"Podívej! Slunce svítí."},
         {speaker:"Terezka",en:"Oh! Now it is raining.",cz:"Jé! Teď prší."},
         {speaker:"Matýsek",en:"I can see a rainbow!",cz:"Vidím duhu!"},
-        {speaker:"Terezka",en:"What a funny day!",cz:"To je ale legrační den!"}
+        {speaker:"Terezka",en:"What strange weather!",cz:"To je ale zvláštní počasí!"}
       ]
     },
     {
@@ -181,7 +181,7 @@ window.FAJN_DATA = {
         {en:"The train is big.",cz:"Vlak je velký."},{en:"I ride my bike.",cz:"Jedu na kole."}
       ],
       story:[
-        {speaker:"Terezka",en:"Let us go by bus!",cz:"Pojďme autobusem!"},
+        {speaker:"Terezka",en:"Let's go by bus!",cz:"Pojďme autobusem!"},
         {speaker:"Matýsek",en:"Then we can take the train.",cz:"Pak můžeme jet vlakem."},
         {speaker:"Terezka",en:"Look! A plane!",cz:"Podívej! Letadlo!"},
         {speaker:"Matýsek",en:"I like travelling.",cz:"Rád cestuji."}
