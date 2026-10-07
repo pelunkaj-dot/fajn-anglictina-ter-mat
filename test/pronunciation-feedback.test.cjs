@@ -72,3 +72,12 @@ test('Confirmed TH substitution stays a correction even at the middle score thre
   const html=h.childPronunciationParts({pronunciation:{status:'assessed',words:[{word:'this',accuracyScore:85,phonemes:[85,90,95].map(accuracyScore=>({accuracyScore}))}],issues:[{type:'th-substitution',word:'this',expected:'ð',accuracyScore:65}]}});
   assert.match(html, /<b>TH<\/b><span>👂 Zkus ještě/);
 });
+test('Accepted clear sounds have consistent praise in the word row and parts heading', () => {
+  const h = helper();
+  const html = h.childPronunciationHtml({ words: [{ word: 'blue', ok: true }],
+    pronunciation: { status: 'assessed', words: [{ word: 'blue', accuracyScore: 68, phonemes: [95,90,94].map(accuracyScore => ({ accuracyScore })) }], issues: [] },
+    feedback: { level: 'good', passed: true, needsPractice: false, title: 'Dobře, povedlo se!', tip: 'Můžeš pokračovat.' } });
+  assert.match(html, /<b>Co se povedlo<\/b>/);
+  assert.match(html, /<b>blue<\/b><span class="clear">🌟 Povedlo se/);
+  assert.doesNotMatch(html, /Už to jde|zkusit|Zkus ještě|68|95|90|94|%/);
+});

@@ -99,7 +99,8 @@ function childPronunciationParts(data) {
     const wordIssues = (p.issues || []).filter(i => String(i.word).toLowerCase() === key);
     const isSubstitution = i => ['voicing', 'th-substitution', 'vowel-substitution', 'phoneme-substitution'].includes(i?.type);
     const issueScores = wordIssues.filter(i => Number.isFinite(i.accuracyScore)).map(i => i.accuracyScore);
-    const band = childPartBand(wordIssues.some(isSubstitution) ? 0 : Math.min(word.accuracyScore, ...phonemes.map(s => s.accuracyScore).filter(Number.isFinite), ...issueScores));
+    const allClear = data.feedback?.passed && data.feedback?.needsPractice === false && wordIssues.length === 0 && phonemes.length > 0 && phonemes.every(s => Number.isFinite(s.accuracyScore) && s.accuracyScore >= 80);
+    const band = childPartBand(allClear ? 80 : wordIssues.some(isSubstitution) ? 0 : Math.min(word.accuracyScore, ...phonemes.map(s => s.accuracyScore).filter(Number.isFinite), ...issueScores));
     const content = data.words?.[index];
     const recognition = content && String(content.word).toLowerCase() === key
       ? `<div class="pronunciation-content">${content.ok ? '✓ Správné slovo' : '👂 Rozpoznáním si nejsem jistá'}</div>` : '';
@@ -116,7 +117,7 @@ function childPronunciationParts(data) {
     }).join('');
     return `<div class="pronunciation-word"><div class="pronunciation-word-title"><b>${esc(word.word)}</b><span class="${band.style}">${band.text}</span></div>${recognition}${sounds ? `<ul class="pronunciation-sounds" aria-label="Zvuky ve slově ${esc(word.word)}">${sounds}</ul>` : ''}</div>`;
   }).join('');
-  return rows ? `<div class="pronunciation-parts"><b>Co se povedlo a co ještě zkusit</b>${rows}</div>` : '';
+  return rows ? `<div class="pronunciation-parts"><b>${data.feedback?.needsPractice === false ? 'Co se povedlo' : 'Co se povedlo a co ještě zkusit'}</b>${rows}</div>` : '';
 }
 
 if (typeof module !== 'undefined') module.exports = { encodeAssessmentWav, phoneticProgressScore };
