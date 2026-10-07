@@ -74,7 +74,7 @@ async function recordYoungWord(expected){
           tinyCelebrate();
         } else if(score >= 60){
           kidSound("success");
-          out.innerHTML = '<div class="kid-feedback good"><div class="feedback-face">🙂</div><strong>Dobré!</strong><span>Zkus to ještě jednou.</span><div class="micro-actions"><button class="btn speak" id="hearAgain">🔊 Ještě jednou</button><button class="btn good" id="sayAgain">🎙️ Zkusím znovu</button></div></div>';
+          out.innerHTML = '<div class="kid-feedback good"><div class="feedback-face">🙂</div><strong>Dobře!</strong><span>Zkus to ještě jednou.</span><div class="micro-actions"><button class="btn speak" id="hearAgain">🔊 Ještě jednou</button><button class="btn good" id="sayAgain">🎙️ Zkusím znovu</button></div></div>';
           document.getElementById("hearAgain").onclick=()=>speak(expected);
           document.getElementById("sayAgain").onclick=()=>recordYoungWord(expected);
         } else {
@@ -97,7 +97,7 @@ async function recordYoungWord(expected){
     out.innerHTML='<div class="kid-feedback listening">🎙️ Poslouchám tvůj hlas…</div>';
     setTimeout(()=>{ if(recorder.state === "recording") recorder.stop(); },2200);
   }catch(err){
-    out.innerHTML='<div class="kid-feedback try">🎙️ Potřebuji mikrofon.<span>Dovol ho v prohlížeči a zkus to znovu.</span></div>';
+    out.innerHTML='<div class="kid-feedback try">🎙️ Mikrofon není povolený.<span>Povol ho v prohlížeči a zkus to znovu.</span></div>';
   }
 }
 
