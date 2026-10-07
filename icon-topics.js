@@ -2,7 +2,9 @@
 const ICON_TOPICS=["weather","transport","emotions"];
 
 function iconTopicVisual(word,compact=false){
-  return `<div class="${compact?"icon-topic compact":"icon-topic"}"><span>${word.visual||"✨"}</span></div>`;
+  const topic=window.FAJN_DATA.topics.find(t=>ICON_TOPICS.includes(t.id)&&t.words.some(w=>w.en===word.en));
+  if(!topic)return "";
+  return `<div class="course-scene${compact?" compact":""}"><img src="assets/${topic.id}/${word.en}.svg" alt="${esc(word.cz||word.en)}" width="256" height="220"></div>`;
 }
 
 const prevYoungVisual3=youngVisual;

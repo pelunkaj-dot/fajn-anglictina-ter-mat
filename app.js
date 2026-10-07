@@ -14,7 +14,7 @@ let chunks = [];
 
 const app = document.getElementById("app");
 const homeBtn = document.getElementById("homeBtn");
-homeBtn.addEventListener("click", renderHome);
+homeBtn.addEventListener("click", ()=>renderHome());
 
 function loadState(){
   try{
@@ -43,12 +43,13 @@ function completeStage(stage){
     ts.stages[stage]=true;
     awardStar();
   } else saveState();
-  if(ts.stages.every(Boolean) && ts.bestPronunciation >= 60) ts.mastered = true;
+  ts.mastered=typeof courseTopicMastered==="function"?courseTopicMastered(currentTopic):false;
   saveState();
 }
 function esc(s){ return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m])); }
 
 function renderHome(){
+  if(typeof stopBritishAudio==="function") stopBritishAudio();
   currentTopic=null;
   const tpl=document.getElementById("homeTemplate").content.cloneNode(true);
   app.innerHTML="";
@@ -56,6 +57,7 @@ function renderHome(){
   const topics=document.getElementById("topics");
   for(const topic of FAJN_DATA.topics){
     const ts=topicState(topic.id);
+    if(typeof courseTopicMastered==="function")ts.mastered=courseTopicMastered(topic);
     const done=ts.stages.filter(Boolean).length;
     const card=document.createElement("button");
     card.className="topic-card";
@@ -101,12 +103,12 @@ function navigateLessonStage(stage){
   currentStage=stage;
   currentIndex=position?.index || 0;
   quizScore=stage===4 ? position?.quizScore || 0 : 0;
-  if("speechSynthesis" in window) window.speechSynthesis.cancel();
+  if(typeof stopBritishAudio==="function") stopBritishAudio();
   renderStage();
 }
 function setLessonBusy(busy){
   lessonBusy=busy;
-  document.querySelectorAll(".path .step, #backHome, #homeBtn, #nextStage").forEach(button=>button.disabled=busy);
+  document.querySelectorAll(".path .step, #backHome, #homeBtn, #nextStage, #leaveGame, #parentBtn").forEach(button=>button.disabled=busy);
 }
 function scheduleLessonAdvance(action,delay){
   const panel=document.querySelector(".panel");
@@ -116,7 +118,8 @@ function scheduleLessonAdvance(action,delay){
   },delay);
 }
 function shell(body){
-  app.classList?.toggle("picture-lesson",currentStage===1);
+  if(typeof stopBritishAudio==="function")stopBritishAudio();
+  app.classList?.toggle("picture-lesson",currentStage===1 || currentStage===4);
   app.innerHTML=`
     <div class="lesson-head">
       <button class="back" id="backHome">← Témata</button>
@@ -154,25 +157,7 @@ function navButton(label="Pokračovat"){
   return `<div class="controls"><button class="btn primary" id="nextStage">${label} →</button></div>`;
 }
 
-async function speak(text){
-  const panel=document.querySelector(".panel");
-  try{
-    const res=await fetch(API_TTS,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({text,lang:"en",voice:"english-female",speed:1.0})});
-    if(panel && !panel.isConnected) return;
-    if(!res.ok) throw new Error();
-    const blob=await res.blob();
-    const url=URL.createObjectURL(blob);
-    const audio=new Audio(url);
-    audio.onended=()=>URL.revokeObjectURL(url);
-    await audio.play();
-  }catch{
-    if(panel && !panel.isConnected) return;
-    if("speechSynthesis" in window){
-      speechSynthesis.cancel();
-      const u=new SpeechSynthesisUtterance(text);u.lang="en-GB";u.rate=.82;speechSynthesis.speak(u);
-    }
-  }
-}
+async function speak(text){ return playBritishModel(text); }
 
 function renderLearn(){
   const w=currentTopic.words[currentIndex];

@@ -13,9 +13,9 @@ function bodyVisual(word,compact=false){
 }
 
 function familyVisual(word,compact=false){
-  const who=word.person;
-  const people = who==="family" ? ["grandma","grandpa","mum","dad","sister","brother","baby"] : [who];
-  return `<div class="${compact?"family-visual compact":"family-visual"}">${people.map((p,i)=>`<div class="person-card ${p}" style="--i:${i}"><div class="person-head"></div><div class="person-body"></div></div>`).join("")}</div>`;
+  const name=word.person||word.en;
+  if(!["mum","dad","sister","brother","grandma","grandpa","baby","family"].includes(name))return "";
+  return `<div class="family-picture${compact?" compact":""}"><img src="assets/family/${name}.webp" alt="${esc(word.cz||name)}" width="512" height="512"></div>`;
 }
 
 const oldYoungVisual = youngVisual;

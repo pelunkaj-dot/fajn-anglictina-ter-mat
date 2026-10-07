@@ -439,3 +439,30 @@ button,input{font:inherit}.topbar{position:sticky;top:0;z-index:10;display:flex;
 .picture-lesson .listen-picture svg{width:48px;height:48px}
 .picture-lesson .body-picture.compact{width:160px}
 @media(max-width:650px){.picture-lesson .lesson-head{flex-direction:row}.picture-lesson .lesson-title h1{font-size:24px}.picture-lesson .lesson-title p{font-size:12px}.picture-lesson .panel{padding:12px}.picture-lesson .body-picture.compact{width:130px}}
+
+.course-picture-options{max-width:600px;margin:auto;grid-template-columns:repeat(2,minmax(0,1fr))!important}
+.course-picture-choice{display:grid;grid-template-columns:1fr;justify-items:center;align-items:center;text-align:center;min-width:0;min-height:170px}
+.course-picture-choice img{width:100%;height:auto;object-fit:contain}
+.course-picture-choice .mini-quiz-picture{width:160px;max-width:100%}
+.course-picture-choice .topic-picture.compact{width:160px;max-width:100%}
+.course-picture-choice .topic-picture.compact img{width:100%;height:130px;object-fit:contain}
+.course-progress{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:0 0 12px;color:#c6cbd6}
+.course-progress .active{color:#4168d8}.course-progress .done{color:#d7aa28}
+.model-audio-notice{margin-top:12px;text-align:center;font-weight:800}.model-audio-notice:empty{display:none}
+[aria-busy="true"] svg{animation:soundPulse .7s ease-in-out infinite alternate}@keyframes soundPulse{to{opacity:.45;transform:scale(.92)}}
+@media(max-width:520px){.course-picture-choice{min-height:140px}.course-picture-choice .mini-quiz-picture,.course-picture-choice .topic-picture.compact{width:130px}.course-picture-choice .topic-picture.compact img{height:110px}}
+
+.practice-home-card{display:flex;justify-content:space-between;align-items:center;gap:16px;margin:22px 0;padding:20px;border:2px solid #d9e2ff;border-radius:22px;background:#f2f5ff}
+.practice-home-card h2{margin:0 0 5px}.practice-home-card p{margin:0}.practice-heading{display:flex;justify-content:center;gap:12px;font-weight:900;margin-bottom:15px}.practice-heading span{color:var(--muted)}
+.practice-main-picture{max-width:220px;margin:0 auto 16px}.practice-main-picture img{max-width:100%;height:auto}.word-practice .say-action{margin:auto}
+.practice-finish{text-align:center}.practice-finish h1{font-size:32px}
+@media(max-width:520px){.practice-home-card{flex-direction:column;align-items:stretch}.practice-home-card .btn{width:100%}}
+
+.family-picture,.course-scene{width:min(260px,100%);margin:0 auto}
+.family-picture img,.course-scene img{display:block;width:100%;height:auto;border-radius:22px}
+.family-picture.compact,.course-scene.compact{width:160px;max-width:100%}
+.game-target .family-picture,.game-target .course-scene{max-width:200px}
+@media(max-width:520px){.family-picture.compact,.course-scene.compact{width:130px}.visual-game-options{grid-template-columns:repeat(2,minmax(0,1fr))}.visual-game-option{min-width:0}}
+
+.parent-top-btn{display:flex;align-items:center;gap:7px;font-size:14px;font-weight:900;line-height:1.3;padding:8px 12px;color:#3d4963;background:#f3f6ff;border-color:#d5def5;white-space:nowrap}.parent-top-btn span{font-size:20px}.parent-topic-details{border:1px solid var(--line);border-radius:14px;padding:12px;margin:10px 0}.parent-topic-details summary{cursor:pointer;font-weight:900}.parent-topic-details summary span{font-size:12px;font-weight:700;color:var(--muted);margin-left:10px}.parent-word-table{width:100%;border-collapse:collapse;font-size:13px}.parent-word-table th,.parent-word-table td{padding:10px 8px;border-bottom:1px solid #eee;text-align:left;vertical-align:top}.parent-word-table small{display:block;color:var(--muted)}.parent-word-table th{min-width:110px}.parent-word-table td:last-child{min-width:160px}.parent-quiz-detail{font-size:14px}.parent-practice-topic{margin-top:12px}.parent-import-label input{display:none}.parent-import-label{display:inline-block}.parent-note{line-height:1.6}
+@media(max-width:520px){.parent-top-btn{padding:7px 8px;font-size:12px;gap:4px}.parent-top-btn span{font-size:17px}.topstats{gap:5px}.topstats span{padding:5px 7px}.parent-topic-details summary span{display:block;margin:5px 0 0}}

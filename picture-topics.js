@@ -2,7 +2,8 @@
 const PICTURE_TOPICS = ["clothes","house","school"];
 
 function topicPictureVisual(topic,word,compact=false){
-  return `<div class="${compact?"topic-picture compact":"topic-picture"}"><img src="assets/${topic.id}/${word.en}.svg" alt="${esc(word.cz)}"></div>`;
+  const extension=["kitchen","garden","teacher"].includes(word.en)?"webp":"svg";
+  return `<div class="${compact?"topic-picture compact":"topic-picture"}"><img src="assets/${topic.id}/${word.en}.${extension}" alt="${esc(word.cz)}"></div>`;
 }
 
 const prevYoungVisual2 = youngVisual;

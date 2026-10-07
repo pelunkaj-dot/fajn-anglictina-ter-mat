@@ -152,7 +152,7 @@ renderQuiz = function(){
 const oldRenderFinishFinal=renderFinish;
 renderFinish=function(){
   const ts=topicState(currentTopic.id);
-  if(ts.stages.every(Boolean) && ts.bestPronunciation>=60) ts.mastered=true;
+  ts.mastered=courseTopicMastered(currentTopic);
   saveState();
   shell(`
     <div class="finish-characters"><img src="assets/characters/terezka.svg" alt="Terezka"><img src="assets/characters/matysek.svg" alt="Matýsek"></div>

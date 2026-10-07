@@ -38,11 +38,11 @@ renderAdventure = function(){
   const q=game.questions[game.round];
   if(!q){ renderAdventureFinish(); return; }
   const progress=(game.round/game.questions.length)*100;
-  const visual = gameVisualPrompt(game.topic,q.word);
+  const visual = q.type==="picturePick" ? "" : gameVisualPrompt(game.topic,q.word);
   let answerArea="";
 
   if(q.type==="picturePick"){
-    answerArea = `<div class="game-options visual-game-options">${q.options.map(o=>`<button class="game-option visual-game-option" data-a="${esc(o.cz)}">${gameVisualPrompt(game.topic,o)}<strong>${esc(o.cz)}</strong></button>`).join("")}</div>`;
+    answerArea = `<div class="game-options visual-game-options">${q.options.map(o=>`<button class="game-option visual-game-option" data-a="${esc(o.cz)}">${gameVisualPrompt(game.topic,o)}</button>`).join("")}</div>`;
   }else if(q.type==="speak"){
     answerArea = `<div class="voice-challenge"><button class="game-mic" id="gameMic"><span>🎙️</span><b>Řeknu to</b></button><button class="btn speak" id="gameModel">🔊 Poslechnout vzor</button></div>`;
   }else{
@@ -68,8 +68,8 @@ renderAdventure = function(){
       </div>
       <div class="game-question young-game-question">
         <div class="combo">${game.combo>=2?`🔥 Série ${game.combo}! + bonus`:""}</div>
-        <div class="game-instruction-icons">${q.type==="speak"?"👀 → 🎙️":q.type==="listen"?"🔊 → 👆":"👀 → 👆"}</div>
-        ${q.type==="listen"?'<div class="controls"><button class="btn speak" id="gameListen">🔊 Poslechnout</button></div>':""}
+        <div class="game-instruction-icons">${q.type==="speak"?"👀 → 🎙️":q.type==="listen"||q.type==="picturePick"?"🔊 → 👆":"👀 → 👆"}</div>
+        ${q.type==="listen"||q.type==="picturePick"?'<div class="controls"><button class="btn speak" id="gameListen">🔊 Poslechnout</button></div>':""}
         <h3>${esc(q.prompt)}</h3>
         ${q.type==="picturePick" ? "" : visual}
         ${answerArea}
@@ -99,7 +99,8 @@ function answerYoungGame(btn,q){
     btn.classList.add("correct");
     all.forEach(x=>x.disabled=true);
     document.getElementById("gameFeedback").innerHTML=`<div class="feedback ok">⭐ Správně! ${gain>1?`Bonus: +${gain}`:""}</div>`;
-    setTimeout(()=>{game.round++;renderAdventure();},650);
+    const playedGame=game,round=game.round,panel=document.querySelector(".panel");
+    setTimeout(()=>{if(playedGame===game&&game.round===round&&panel?.isConnected){game.round++;renderAdventure();}},650);
   }else{
     game.combo=0;
     kidSound("try");
@@ -111,6 +112,8 @@ function answerYoungGame(btn,q){
 }
 
 async function recordGameWord(q){
+  if(lessonBusy)return;
+  setLessonBusy(true);
   const btn=document.getElementById("gameMic");
   const out=document.getElementById("gameFeedback");
   try{
@@ -146,6 +149,7 @@ async function recordGameWord(q){
       if(skip) skip.onclick=()=>{game.combo=0;game.round++;renderAdventure();};
     }
   }finally{
+    setLessonBusy(false);
     btn.disabled=false;
     btn.innerHTML="<span>🎙️</span><b>Řeknu to</b>";
   }
