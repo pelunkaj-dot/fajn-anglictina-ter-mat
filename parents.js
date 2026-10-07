@@ -64,6 +64,10 @@ function openParentGate(){
   }
 }
 
+function phoneticParentLabel(score){
+  return score>=80 ? "🌟 výslovnost ověřena" : score>=60 ? "🙂 výslovnost se daří" : "🌱 výslovnost ještě trénuje";
+}
+
 function pronunciationLabel(score){
   const n=Number(score)||0;
   if(n>=80)return "🌟 dobře rozpoznáno";
@@ -80,7 +84,7 @@ function renderParentDashboard(){
       <td><strong>${topic.emoji} ${esc(topic.cz)}</strong><small>${esc(topic.title)}</small></td>
       <td>${done}/5</td>
       <td>${ts.mastered?"🏅 Umím":ts.stages?.every(Boolean)?"✅ Dokončeno":"—"}</td>
-      <td>${pronunciationLabel(ts.bestPronunciation)}</td>
+      <td>${ts.bestPhoneticPronunciation ? phoneticParentLabel(ts.bestPhoneticPronunciation) : pronunciationLabel(ts.bestPronunciation)}</td>
     </tr>`;
   }).join("");
   const mastered=FAJN_DATA.topics.filter(t=>topicState(t.id).mastered).length;

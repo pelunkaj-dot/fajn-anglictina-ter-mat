@@ -9,8 +9,8 @@ function youngVisual(topic, word){
 
 function wordPronState(topicId){
   const ts = topicState(topicId);
-  ts.wordPronunciation ||= {};
-  return ts.wordPronunciation;
+  ts.wordPhoneticPronunciation ||= {};
+  return ts.wordPhoneticPronunciation;
 }
 
 renderLearn = function(){
@@ -49,36 +49,22 @@ async function recordYoungWord(expected){
   const out=document.getElementById("wordPronResult");
   try{
     const blob=await captureChildSpeech({button:btn,out,maxMs:3200,minMs:350,silenceMs:650});
-    const fd=new FormData();
-    fd.append("audio",blob,"audio.webm");
-    fd.append("expectedText",expected);
-    fd.append("language","en-GB");
+    const data=await assessChildSpeech(blob, expected);
 
-    const res=await fetch(API_PRON,{method:"POST",body:fd});
-    const data=await res.json();
-    if(!res.ok) throw new Error(data.error||"Chyba");
-
-    const score=Number(data.score)||0;
+    const score=phoneticProgressScore(data);
     const wp=wordPronState(currentTopic.id);
     wp[expected]=Math.max(Number(wp[expected]||0),score);
     saveState();
 
-    if(score>=80){
-      kidSound("success");
-      out.innerHTML='<div class="kid-feedback great"><div class="feedback-face">🌟</div><strong>Paráda!</strong><span>Zní to moc dobře.</span></div>';
-      tinyCelebrate();
-    }else if(score>=60){
-      kidSound("success");
-      out.innerHTML='<div class="kid-feedback good"><div class="feedback-face">🙂</div><strong>Dobře!</strong><span>Zkus to ještě jednou.</span><div class="micro-actions"><button class="btn speak" id="hearAgain">🔊 Ještě jednou</button><button class="btn good" id="sayAgain">🎙️ Zkusím znovu</button></div></div>';
+    out.innerHTML=childPronunciationHtml(data);
+    kidSound(data.feedback.passed ? "success" : "try");
+    if(data.feedback.level==="great") tinyCelebrate();
+    if(data.feedback.level!=="great"){
+      out.innerHTML+='<div class="micro-actions"><button class="btn speak" id="hearAgain">🔊 Poslechnout vzor</button><button class="btn good" id="sayAgain">🎙️ Zkusím znovu</button></div>';
       document.getElementById("hearAgain").onclick=()=>speak(expected);
       document.getElementById("sayAgain").onclick=()=>recordYoungWord(expected);
-    }else{
-      kidSound("try");
-      out.innerHTML='<div class="kid-feedback try"><div class="feedback-face">👂</div><strong>Poslechni ještě jednou.</strong><span>A pak to zkus znovu.</span><div class="micro-actions"><button class="btn speak" id="hearAgain">🔊 Poslechnout</button><button class="btn good" id="sayAgain">🎙️ Řeknu to</button></div></div>';
-      document.getElementById("hearAgain").onclick=()=>speak(expected);
-      document.getElementById("sayAgain").onclick=()=>recordYoungWord(expected);
-      speak(expected);
     }
+    if(data.feedback.level==="retry") speak(expected);
   }catch(err){
     if(err?.code==="no-speech"){
       out.innerHTML='<div class="kid-feedback try"><div class="feedback-face">👂</div><strong>Neslyšela jsem tě.</strong><span>Zkus to ještě jednou.</span><div class="micro-actions"><button class="btn good" id="sayAgain">🎙️ Zkusím znovu</button></div></div>';

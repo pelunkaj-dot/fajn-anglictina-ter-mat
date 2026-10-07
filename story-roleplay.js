@@ -62,32 +62,17 @@ async function recordStoryLine(index){
     const maxMs=Math.min(6500,Math.max(3600,line.en.split(/\s+/).length*760));
     const blob=await captureChildSpeech({button:btn,out,maxMs,minMs:700,silenceMs:900});
 
-    const fd=new FormData();
-    fd.append("audio",blob,"audio.webm");
-    fd.append("expectedText",line.en);
-    fd.append("language","en-GB");
+    const data=await assessChildSpeech(blob, line.en);
 
-    const res=await fetch(API_PRON,{method:"POST",body:fd});
-    const data=await res.json();
-    if(!res.ok) throw new Error(data.error||"Chyba");
-
-    const score=Number(data.score)||0;
-    if(score>=80){
-      kidSound("success");
-      out.innerHTML='<div class="kid-feedback great"><div class="feedback-face">🌟</div><strong>Skvělá replika!</strong><span>Terezce a Matýskovi by se to líbilo.</span></div>';
-    }else if(score>=60){
-      kidSound("success");
-      out.innerHTML='<div class="kid-feedback good"><div class="feedback-face">🙂</div><strong>Dobře!</strong><span>Zkus ji ještě jednou jako opravdový herec.</span></div>';
-    }else{
-      kidSound("try");
-      out.innerHTML='<div class="kid-feedback try"><div class="feedback-face">👂</div><strong>Poslechni vzor.</strong><span>A pak repliku zopakuj.</span></div>';
-      speak(line.en);
-    }
+    const score=phoneticProgressScore(data);
+    kidSound(data.feedback.passed ? "success" : "try");
+    out.innerHTML=childPronunciationHtml(data);
+    if(data.feedback.level==="retry") speak(line.en);
   }catch(err){
     if(err?.code==="no-speech"){
       out.innerHTML='<div class="kid-feedback try"><div class="feedback-face">👂</div><strong>Neslyšela jsem tě.</strong><span>Zkus repliku ještě jednou.</span></div>';
     }else{
-      out.innerHTML='<div class="kid-feedback try">🎙️ Mikrofon není dostupný. Repliku můžeš zkusit později.</div>';
+      out.innerHTML='<div class="kid-feedback try">🎙️ Hlas se teď nepodařilo zkontrolovat. Repliku můžeš zkusit později.</div>';
     }
   }finally{
     btn.disabled=false;

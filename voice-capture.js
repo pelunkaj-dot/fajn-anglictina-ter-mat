@@ -41,6 +41,7 @@ async function captureChildSpeech({button,out,maxMs=4500,minMs=450,silenceMs=750
     try{
       recorder=new MediaRecorder(stream);
       recorder.ondataavailable=e=>{ if(e.data.size) chunks.push(e.data); };
+      recorder.onerror=()=>{ stopped=true; cleanup(); reject(new Error("recording-failed")); };
       recorder.onstop=()=>{
         if(stopped) return;
         stopped=true;
@@ -51,7 +52,7 @@ async function captureChildSpeech({button,out,maxMs=4500,minMs=450,silenceMs=750
           return;
         }
         setOut('<div class="voice-state judging"><div class="voice-big">✅</div><strong>Hotovo!</strong><span>Teď hodnotím…</span></div>');
-        resolve(new Blob(chunks,{type:"audio/webm"}));
+        resolve(new Blob(chunks,{type:recorder.mimeType || chunks[0]?.type || "audio/webm"}));
       };
 
       recorder.start();
@@ -91,6 +92,7 @@ async function captureChildSpeech({button,out,maxMs=4500,minMs=450,silenceMs=750
         };
         raf=requestAnimationFrame(tick);
       }else{
+        hasSpoken=true; // The backend handles an unrecognized/silent recording.
         setTimeout(()=>{if(recorder.state==="recording")recorder.stop();},maxMs);
       }
     }catch(err){ cleanup(); reject(err); }

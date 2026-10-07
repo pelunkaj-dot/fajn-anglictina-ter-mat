@@ -207,62 +207,20 @@ function renderSpeak(){
       <button class="btn good" id="record">🎙️ Řeknu to</button>
     </div>
     <div id="pronResult"></div>
-    <p class="mini" style="text-align:center">Nejlepší výsledek v tématu: ${ts.bestPronunciation||0} %</p>`);
+`);
   document.getElementById("listen").onclick=()=>speak(sentence.en);
   document.getElementById("record").onclick=()=>recordPronunciation(sentence.en);
 }
 
 async function recordPronunciation(expected){
-  const btn=document.getElementById("record");
+  const button=document.getElementById("record");
   const out=document.getElementById("pronResult");
   try{
-    const stream=await navigator.mediaDevices.getUserMedia({audio:true});
-    chunks=[];
-    mediaRecorder=new MediaRecorder(stream);
-    mediaRecorder.ondataavailable=e=>{if(e.data.size) chunks.push(e.data);};
-    mediaRecorder.onstop=async()=>{
-      stream.getTracks().forEach(t=>t.stop());
-      const blob=new Blob(chunks,{type:"audio/webm"});
-      const fd=new FormData();
-      fd.append("audio",blob,"audio.webm");
-      fd.append("expectedText",expected);
-      fd.append("language","en-GB");
-      out.className="feedback";out.textContent="Poslouchám a porovnávám…";
-      try{
-        const res=await fetch(API_PRON,{method:"POST",body:fd});
-        const data=await res.json();
-        if(!res.ok) throw new Error(data.error||"Chyba");
-        const score=Number(data.score)||0;
-        const ts=topicState(currentTopic.id);
-        ts.bestPronunciation=Math.max(ts.bestPronunciation||0,score);
-        saveState();
-        out.className="feedback "+(score>=60?"ok":"bad");
-        out.innerHTML=`<div class="score">${score} %</div>
-          <div class="meter"><span style="width:${score}%"></span></div>
-          <p><strong>Slyšela jsem:</strong> ${esc(data.transcript||"")}</p>
-          <p>${score>=80?"Výborně. Zní to velmi dobře!":score>=60?"Dobře! Ještě jednou a bude to jistější.":esc(data.tip||"Zkus si větu znovu poslechnout a zopakovat.")}</p>
-          <div class="controls">
-            <button class="btn" id="again">Zkusit znovu</button>
-            <button class="btn primary" id="continueSpeak">${currentIndex===currentTopic.sentences.length-1?"Pokračovat":"Další věta"} →</button>
-          </div>`;
-        document.getElementById("again").onclick=()=>renderSpeak();
-        document.getElementById("continueSpeak").onclick=()=>{
-          if(currentIndex<currentTopic.sentences.length-1){currentIndex++;renderSpeak();}
-          else nextStage();
-        };
-      }catch(err){
-        out.className="feedback bad";
-        out.textContent="Kontrolu výslovnosti se teď nepodařilo spustit. Můžeš pokračovat a zkusit ji později.";
-      }
-    };
-    mediaRecorder.start();
-    btn.disabled=true;btn.textContent="🔴 Mluv…";
-    out.className="feedback";out.textContent="Mluv teď. Nahrávání se samo zastaví za 4 sekundy.";
-    setTimeout(()=>{if(mediaRecorder?.state==="recording")mediaRecorder.stop();},4000);
+    const blob=await captureChildSpeech({button,out,maxMs:6200,minMs:700,silenceMs:850});
+    out.innerHTML=childPronunciationHtml(await assessChildSpeech(blob,expected));
   }catch{
-    out.className="feedback bad";
-    out.textContent="Nemám přístup k mikrofonu. Povol mikrofon v prohlížeči a zkus to znovu.";
-  }
+    out.textContent="Hlas se teď nepodařilo zkontrolovat. Zkus to znovu.";
+  }finally{button.disabled=false;button.textContent="🎙️ Řeknu to";}
 }
 
 function colorVisualHtml(w){

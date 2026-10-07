@@ -115,35 +115,33 @@ async function recordGameWord(q){
   const out=document.getElementById("gameFeedback");
   try{
     const blob=await captureChildSpeech({button:btn,out,maxMs:3400,minMs:350,silenceMs:650});
-    const fd=new FormData();
-    fd.append("audio",blob,"audio.webm");
-    fd.append("expectedText",q.answer);
-    fd.append("language","en-GB");
+    const data=await assessChildSpeech(blob, q.answer);
 
-    const res=await fetch(API_PRON,{method:"POST",body:fd});
-    const data=await res.json();
-    if(!res.ok) throw new Error(data.error||"Chyba");
-
-    const score=Number(data.score)||0;
-    if(score>=60){
+    const score=phoneticProgressScore(data);
+    if(data.feedback.passed){
       game.combo++;
       game.bestCombo=Math.max(game.bestCombo,game.combo);
       const gain=score>=80?3:2;
       game.score+=gain;
       kidSound(score>=80?"reward":"success");
-      out.innerHTML=`<div class="voice-game-result goodvoice"><div>🌟</div><strong>${score>=80?"Paráda!":"Dobře!"}</strong><span>Brána se otevřela.</span></div>`;
-      setTimeout(()=>{game.round++;renderAdventure();},900);
+      out.innerHTML=childPronunciationHtml(data,true);
+      out.innerHTML+='<div class="controls"><button class="btn primary" id="continueGameVoice">Brána se otevřela. Pokračovat →</button></div>';
+      document.getElementById("continueGameVoice").onclick=()=>{game.round++;renderAdventure();};
     }else{
       game.combo=0;
       kidSound("try");
-      out.innerHTML='<div class="voice-game-result tryvoice"><div>👂</div><strong>Ještě jednou.</strong><span>Poslechni vzor a zkus to znovu.</span></div>';
-      speak(q.answer);
+      out.innerHTML=childPronunciationHtml(data,true);
+      if(data.feedback.level==="retry") speak(q.answer);
+      if(data.feedback.level==="content-only"){
+        out.innerHTML+='<div class="controls"><button class="btn" id="skipGameVoice">Pokračovat bez hodnocení výslovnosti →</button></div>';
+        document.getElementById("skipGameVoice").onclick=()=>{game.round++;renderAdventure();};
+      }
     }
   }catch(err){
     if(err?.code==="no-speech"){
       out.innerHTML='<div class="voice-game-result tryvoice"><div>👂</div><strong>Neslyšela jsem tě.</strong><span>Zkus to ještě jednou.</span></div>';
     }else{
-      out.innerHTML='<div class="feedback bad">🎙️ Mikrofon není dostupný.<div class="controls"><button class="btn" id="skipGameVoice">Pokračovat bez mikrofonu →</button></div></div>';
+      out.innerHTML='<div class="feedback bad">🎙️ Hlas se teď nepodařilo zkontrolovat.<div class="controls"><button class="btn" id="skipGameVoice">Pokračovat bez mikrofonu →</button></div></div>';
       const skip=document.getElementById("skipGameVoice");
       if(skip) skip.onclick=()=>{game.combo=0;game.round++;renderAdventure();};
     }

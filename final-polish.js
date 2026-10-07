@@ -45,31 +45,16 @@ recordPronunciation = async function(expected){
   const out=document.getElementById("pronResult");
   try{
     const blob=await captureChildSpeech({button:btn,out,maxMs:6200,minMs:700,silenceMs:850});
-    const fd=new FormData();
-    fd.append("audio",blob,"audio.webm");
-    fd.append("expectedText",expected);
-    fd.append("language","en-GB");
+    const data=await assessChildSpeech(blob, expected);
 
-    const res=await fetch(API_PRON,{method:"POST",body:fd});
-    const data=await res.json();
-    if(!res.ok) throw new Error(data.error||"Chyba");
-
-    const score=Number(data.score)||0;
+    const score=phoneticProgressScore(data);
     const ts=topicState(currentTopic.id);
+    ts.bestPhoneticPronunciation=Math.max(ts.bestPhoneticPronunciation||0,score);
     ts.bestPronunciation=Math.max(ts.bestPronunciation||0,score);
     saveState();
 
-    let message="";
-    if(score>=80){
-      kidSound("success");
-      message='<div class="kid-feedback great"><div class="feedback-face">🌟</div><strong>Výborně!</strong><span>Bylo ti krásně rozumět.</span></div>';
-    }else if(score>=60){
-      kidSound("success");
-      message='<div class="kid-feedback good"><div class="feedback-face">🙂</div><strong>Dobře!</strong><span>Ještě jednou a bude to jistější.</span></div>';
-    }else{
-      kidSound("try");
-      message='<div class="kid-feedback try"><div class="feedback-face">👂</div><strong>Poslechni ještě jednou.</strong><span>A pak větu zopakuj.</span></div>';
-    }
+    kidSound(data.feedback.passed ? "success" : "try");
+    const message=childPronunciationHtml(data);
 
     out.innerHTML=message+`<div class="controls"><button class="btn speak" id="hearSentenceAgain">🔊 Poslechnout</button><button class="btn good" id="saySentenceAgain">🎙️ Znovu</button><button class="btn primary" id="continueSentence">${currentIndex===currentTopic.sentences.length-1?"Pokračovat":"Další věta"} →</button></div>`;
     document.getElementById("hearSentenceAgain").onclick=()=>speak(expected);
@@ -77,14 +62,14 @@ recordPronunciation = async function(expected){
     document.getElementById("continueSentence").onclick=()=>{
       if(currentIndex<currentTopic.sentences.length-1){currentIndex++;renderSpeak();}else nextStage();
     };
-    if(score<60) speak(expected);
+    if(data.feedback.level==="retry") speak(expected);
   }catch(err){
     if(err?.code==="no-speech"){
       out.innerHTML='<div class="kid-feedback try"><div class="feedback-face">👂</div><strong>Neslyšela jsem tě.</strong><span>Zkus větu ještě jednou.</span><div class="controls"><button class="btn good" id="saySentenceAgain">🎙️ Zkusím znovu</button></div></div>';
       const again=document.getElementById("saySentenceAgain");
       if(again) again.onclick=()=>renderSpeak();
     }else{
-      out.innerHTML='<div class="kid-feedback try"><div class="feedback-face">🎙️</div><strong>Mikrofon není dostupný.</strong><span>Můžeš pokračovat a mluvení zkusit později.</span><div class="controls"><button class="btn primary" id="continueNoMic">Pokračovat →</button></div></div>';
+      out.innerHTML='<div class="kid-feedback try"><div class="feedback-face">🎙️</div><strong>Hlas se teď nepodařilo zkontrolovat.</strong><span>Můžeš pokračovat a mluvení zkusit později.</span><div class="controls"><button class="btn primary" id="continueNoMic">Pokračovat →</button></div></div>';
       const next=document.getElementById("continueNoMic");
       if(next) next.onclick=()=>{if(currentIndex<currentTopic.sentences.length-1){currentIndex++;renderSpeak();}else nextStage();};
     }
