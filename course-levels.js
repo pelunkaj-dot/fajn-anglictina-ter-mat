@@ -107,9 +107,9 @@ function courseSceneHtml(scene,compact=false){
   return `<div class="meaning-scene ${compact?'compact':''}" role="img" aria-label="${esc(courseSceneLabel(scene))}">${(scene.objects||[]).map(o=>`<div class="meaning-objects count-${o.count||1} ${o.size?'object-'+o.size:''}">${Array.from({length:o.count||1},()=>`<div class="meaning-object">${courseObjectVisual(o)}</div>`).join('')}</div>`).join('')}</div>`;
 }
 function situationVisual(scene,compact){
-  if(scene.situation==='playtime')return `<div class="meaning-scene toy-scene"><img src="assets/situations/${esc(scene.prop)}.svg" alt="${esc({ball:'míč',teddy:'plyšový medvídek',kite:'drak',blocks:'kostky'}[scene.prop]||'hračka')}"></div>`;
-  if(['terezka','matysek'].includes(scene.prop))return `<div class="meaning-scene"><img class="role-character" src="assets/characters/${scene.prop}.svg" alt="${scene.prop==='terezka'?'Terezka':'Matýsek'}"></div>`;
-  return `<div class="meaning-scene greeting-scene"><img src="assets/situations/${esc(scene.prop)}.svg" alt="${esc({hello:'setkání a pozdrav',goodbye:'loučení',thanks:'poděkování za dárek',please:'prosba o hračku'}[scene.prop]||'situace')}"></div>`;
+  if(scene.situation==='playtime')return `<div class="meaning-scene toy-scene ${compact?'compact':''}"><img src="assets/situations/${esc(scene.prop)}.svg" alt="${esc({ball:'míč',teddy:'plyšový medvídek',kite:'drak',blocks:'kostky'}[scene.prop]||'hračka')}"></div>`;
+  if(['terezka','matysek'].includes(scene.prop))return `<div class="meaning-scene ${compact?'compact':''}"><img class="role-character" src="assets/characters/${scene.prop}.svg" alt="${scene.prop==='terezka'?'Terezka':'Matýsek'}"></div>`;
+  return `<div class="meaning-scene greeting-scene ${compact?'compact':''}"><img src="assets/situations/${esc(scene.prop)}.svg" alt="${esc({hello:'setkání a pozdrav',goodbye:'loučení',thanks:'poděkování za dárek',please:'prosba o hračku'}[scene.prop]||'situace')}"></div>`;
 }
 function courseChoices(units,unit){
   const distinct=units.filter(u=>u.id!==unit.id&&JSON.stringify(u.scene)!==JSON.stringify(unit.scene));
