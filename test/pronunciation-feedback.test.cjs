@@ -56,21 +56,21 @@ test('Mixed frog result shows each sound and three progress bands without percen
   const h = helper();
   const html = h.childPronunciationHtml({words:[{word:'frog',ok:true}], pronunciation:{status:'assessed',words:[{word:'frog',accuracyScore:82,phonemes:[100,72,93,91].map(accuracyScore=>({accuracyScore}))}],issues:[{word:'frog',expected:'g',accuracyScore:54}]},feedback:{level:'retry',passed:false,title:'Poslechni si vzor znovu.',tip:'Zkus G s hlasem.'}});
   assert.match(html, /✓ Správné slovo/);
-  assert.match(html, /<b>F<\/b><span>🌟 Povedlo se/);
-  assert.match(html, /<b>R<\/b><span>🙂 Už to jde/);
-  assert.match(html, /<b>G<\/b><span>👂 Zkus ještě/);
+  assert.match(html, /<b>F<\/b><small>[^<]*<\/small><span>🌟 Povedlo se/);
+  assert.match(html, /<b>R<\/b><small>[^<]*<\/small><span>🙂 Už to jde/);
+  assert.match(html, /<b>G<\/b><small>[^<]*<\/small><span>👂 Zkus ještě/);
   assert.doesNotMatch(html, /82|100|72|93|91|54|%/);
 });
 test('Unknown or differently sized phoneme sequences are not assigned guessed letters', () => {
   const h = helper();
   const html = h.childPronunciationParts({pronunciation:{status:'assessed',words:[{word:'frog',accuracyScore:70,phonemes:[{accuracyScore:60}]}]}});
-  assert.match(html, /1\. zvuk/); assert.doesNotMatch(html, /<b>F<\/b>/);
+  assert.match(html, /1\. hláska/); assert.doesNotMatch(html, /<b>F<\/b>/);
   assert.equal(h.childPronunciationParts({pronunciation:{status:'unavailable',words:[{word:'frog',accuracyScore:100}]}}), '');
 });
 test('Confirmed TH substitution stays a correction even at the middle score threshold', () => {
   const h=helper();
   const html=h.childPronunciationParts({pronunciation:{status:'assessed',words:[{word:'this',accuracyScore:85,phonemes:[85,90,95].map(accuracyScore=>({accuracyScore}))}],issues:[{type:'th-substitution',word:'this',expected:'ð',accuracyScore:65}]}});
-  assert.match(html, /<b>TH<\/b><span>👂 Zkus ještě/);
+  assert.match(html, /<b>TH<\/b><small>[^<]*<\/small><span>👂 Zkus ještě/);
 });
 test('Accepted clear sounds have consistent praise in the word row and parts heading', () => {
   const h = helper();
@@ -78,6 +78,24 @@ test('Accepted clear sounds have consistent praise in the word row and parts hea
     pronunciation: { status: 'assessed', words: [{ word: 'blue', accuracyScore: 68, phonemes: [95,90,94].map(accuracyScore => ({ accuracyScore })) }], issues: [] },
     feedback: { level: 'good', passed: true, needsPractice: false, title: 'Dobře, povedlo se!', tip: 'Můžeš pokračovat.' } });
   assert.match(html, /<b>Co se povedlo<\/b>/);
-  assert.match(html, /<b>blue<\/b><span class="clear">🌟 Povedlo se/);
+  assert.match(html, /<b>blue<\/b><span class="clear"><small>Výslovnost celého slova<\/small>🌟 Povedlo se/);
   assert.doesNotMatch(html, /Už to jde|zkusit|Zkus ještě|68|95|90|94|%/);
+});
+
+test('Blue explains content, whole-word pronunciation and B/L/long vowel separately', () => {
+  const h = helper();
+  const html = h.childPronunciationParts({words:[{word:'blue',ok:true}], pronunciation:{status:'assessed',words:[{word:'blue',accuracyScore:90,phonemes:[90,90,90].map(accuracyScore=>({accuracyScore}))}],issues:[]}});
+  assert.match(html, /Řekl\/a jsi správné slovo/);
+  assert.match(html, /Výslovnost celého slova/);
+  assert.match(html, /Jak zněly jednotlivé hlásky/);
+  assert.match(html, /<b>B<\/b>/); assert.match(html, /<b>L<\/b>/);
+  assert.match(html, /<b>dlouhé U<\/b>/);
+  assert.match(html, /britským vzorem/);
+  assert.doesNotMatch(html, /1\. hláska|90|%/);
+});
+test('TH distinguishes voiced and voiceless articulation descriptions', () => {
+  const h = helper();
+  assert.match(h.childSoundDescription('θ',0), /TH bez hlasu/);
+  assert.match(h.childSoundDescription('ð',0), /TH s hlasem/);
+  assert.match(h.childSoundDescription(null,1), /název se nepodařilo spolehlivě určit/);
 });

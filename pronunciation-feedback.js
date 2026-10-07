@@ -77,12 +77,55 @@ const childReferenceSounds = {
   rabbit: ['r', 'æ', 'b', 'ɪ', 't'], dog: ['d', 'ɒ', 'g'],
   three: ['θ', 'r', 'i'], think: ['θ', 'ɪ', 'ŋ', 'k'],
   this: ['ð', 'ɪ', 's'], water: ['w', 'ɔ', 't', 'ə'],
+  blue: ['b','l','uː'], green: ['g','r','iː','n'], yellow: ['j','ɛ','l','əʊ'],
+  orange: ['ɒ','r','ɪ','n','dʒ'], pink: ['p','ɪ','ŋ','k'], purple: ['p','ɜː','p','ə','l'],
+  brown: ['b','r','aʊ','n'], black: ['b','l','æ','k'], white: ['w','aɪ','t'],
+  cat: ['k','æ','t'], bird: ['b','ɜː','d'], fish: ['f','ɪ','ʃ'], horse: ['h','ɔː','s'], mouse: ['m','aʊ','s'],
+  apple: ['æ','p','ə','l'], bread: ['b','r','ɛ','d'], milk: ['m','ɪ','l','k'], cheese: ['tʃ','iː','z'],
+  banana: ['b','ə','n','ɑː','n','ə'], egg: ['ɛ','g'], cake: ['k','eɪ','k'],
+  one: ['w','ʌ','n'], two: ['t','uː'], four: ['f','ɔː'], five: ['f','aɪ','v'], six: ['s','ɪ','k','s'],
+  seven: ['s','ɛ','v','ə','n'], eight: ['eɪ','t'], nine: ['n','aɪ','n'], ten: ['t','ɛ','n'],
+  head: ['h','ɛ','d'], eyes: ['aɪ','z'], ears: ['ɪə','z'], nose: ['n','əʊ','z'], mouth: ['m','aʊ','θ'],
+  hands: ['h','æ','n','d','z'], knees: ['n','iː','z'], feet: ['f','iː','t'],
+  mum: ['m','ʌ','m'], sister: ['s','ɪ','s','t','ə'], brother: ['b','r','ʌ','ð','ə'],
+  grandma: ['g','r','æ','n','m','ɑː'], grandpa: ['g','r','æ','n','p','ɑː'], baby: ['b','eɪ','b','i'], family: ['f','æ','m','ə','l','i'],
+  't-shirt': ['t','iː','ʃ','ɜː','t'], shoes: ['ʃ','uː','z'], socks: ['s','ɒ','k','s'], hat: ['h','æ','t'],
+  coat: ['k','əʊ','t'], dress: ['d','r','ɛ','s'], trousers: ['t','r','aʊ','z','ə','z'], gloves: ['g','l','ʌ','v','z'],
+  house: ['h','aʊ','s'], door: ['d','ɔː'], window: ['w','ɪ','n','d','əʊ'], kitchen: ['k','ɪ','tʃ','ə','n'],
+  table: ['t','eɪ','b','ə','l'], chair: ['tʃ','eə'], bed: ['b','ɛ','d'], garden: ['g','ɑː','d','ə','n'],
+  school: ['s','k','uː','l'], bag: ['b','æ','g'], pencil: ['p','ɛ','n','s','ə','l'], book: ['b','ʊ','k'],
+  ruler: ['r','uː','l','ə'], desk: ['d','ɛ','s','k'], teacher: ['t','iː','tʃ','ə'], bell: ['b','ɛ','l'],
+  sun: ['s','ʌ','n'], rain: ['r','eɪ','n'], snow: ['s','n','əʊ'], cloud: ['k','l','aʊ','d'],
+  wind: ['w','ɪ','n','d'], rainbow: ['r','eɪ','n','b','əʊ'], thunder: ['θ','ʌ','n','d','ə'], fog: ['f','ɒ','g'],
+  car: ['k','ɑː'], bus: ['b','ʌ','s'], train: ['t','r','eɪ','n'], bike: ['b','aɪ','k'],
+  plane: ['p','l','eɪ','n'], boat: ['b','əʊ','t'], taxi: ['t','æ','k','s','i'], tram: ['t','r','æ','m'],
+  happy: ['h','æ','p','i'], sad: ['s','æ','d'], angry: ['æ','ŋ','g','r','i'], scared: ['s','k','eə','d'],
+  surprised: ['s','ə','p','r','aɪ','z','d'], tired: ['t','aɪə','d'], excited: ['ɪ','k','s','aɪ','t','ɪ','d'], bored: ['b','ɔː','d'],
+
 };
 function childSoundLabel(sound) {
-  const labels = { 'ɹ': 'R', r: 'R', 'θ': 'TH', 'ð': 'TH',
-    'ɒ': 'O', 'ɔ': 'O', 'ɑ': 'A', 'æ': 'A', 'ɛ': 'E',
-    'ɪ': 'I', i: 'Í', 'iː': 'Í', 'ə': 'krátký koncový zvuk', 'ŋ': 'NG', 'ɡ': 'G' };
+  const labels = { 'ɹ': 'R', r: 'R', 'θ': 'TH', 'ð': 'TH', 'ʃ': 'SH', 'tʃ': 'CH', 'dʒ': 'J',
+    'ɒ': 'krátké O', 'ɔ': 'O podle vzoru', 'ɔː': 'dlouhé O', 'ɑ': 'A podle vzoru', 'ɑː': 'dlouhé A', 'æ': 'otevřené A', 'ɛ': 'krátké E',
+    'ɪ': 'krátké I', i: 'I podle vzoru', 'iː': 'dlouhé I', 'uː': 'dlouhé U', 'ʊ': 'krátké U',
+    'ʌ': 'samohláska v mum', 'ɜː': 'samohláska v bird', 'ə': 'slabá samohláska',
+    'eɪ': 'samohláska v cake', 'aɪ': 'samohláska v five', 'əʊ': 'samohláska v nose',
+    'aʊ': 'samohláska v mouse', 'ɪə': 'samohláska v ears', 'eə': 'samohláska v chair', 'aɪə': 'samohláska v tired', 'ŋ': 'NG', 'ɡ': 'G' };
   return labels[sound] || (/^[a-z]$/.test(sound || '') ? sound.toUpperCase() : null);
+}
+function childSoundDescription(sound, position) {
+  const descriptions = {
+    r: 'Anglické R: jazyk nekmitá jako u českého R.', 'ɹ': 'Anglické R: jazyk nekmitá jako u českého R.',
+    'θ': 'TH bez hlasu: špička jazyka lehce mezi zuby.', 'ð': 'TH s hlasem: špička jazyka mezi zuby, krk vibruje.',
+    g: 'G s hlasem: krk jemně vibruje.', 'ɡ': 'G s hlasem: krk jemně vibruje.',
+    k: 'K bez hlasu: krk nevibruje.', 'ŋ': 'Nosový zvuk jako na konci sing.',
+    'ʃ': 'Zvuk SH jako na začátku shoes.', 'tʃ': 'Zvuk CH jako na začátku cheese.',
+    'dʒ': 'Zvuk J jako na začátku juice.', 'uː': 'Dlouhá samohláska jako v blue: zaokrouhli rty.',
+    'æ': 'Samohláska jako v cat: otevři ústa víc než u českého E.',
+  };
+  if (descriptions[sound]) return descriptions[sound];
+  if (/^[a-z]$/.test(sound || '')) return `Hláska ${childSoundLabel(sound)}: vyslov zvuk, ne název písmene.`;
+  if (childSoundLabel(sound)) return 'Samohláska: napodob její zvuk a délku v britském vzoru.';
+  return `Hláska na ${position + 1}. místě ve výslovnosti. Její název se nepodařilo spolehlivě určit.`;
 }
 function childPartBand(score) {
   return score >= 80 ? { style: 'clear', text: '🌟 Povedlo se' }
@@ -103,21 +146,21 @@ function childPronunciationParts(data) {
     const band = childPartBand(allClear ? 80 : wordIssues.some(isSubstitution) ? 0 : Math.min(word.accuracyScore, ...phonemes.map(s => s.accuracyScore).filter(Number.isFinite), ...issueScores));
     const content = data.words?.[index];
     const recognition = content && String(content.word).toLowerCase() === key
-      ? `<div class="pronunciation-content">${content.ok ? '✓ Správné slovo' : '👂 Rozpoznáním si nejsem jistá'}</div>` : '';
+      ? `<div class="pronunciation-content"><b>Řekl/a jsi správné slovo?</b> ${content.ok ? '✓ Správné slovo' : '👂 Rozpoznáním si nejsem jistá'}</div>` : '';
     const sounds = phonemes.map((phoneme, position) => {
       if (!Number.isFinite(phoneme.accuracyScore)) return '';
       const sound = phoneme.phoneme || (reference?.length === phonemes.length ? reference[position] : null);
-      const label = childSoundLabel(sound) || `${position + 1}. zvuk`;
+      const label = childSoundLabel(sound) || `${position + 1}. hláska`;
       const normalizeSound = s => String(s || '').replace(/ɹ/g, 'r').replace(/ɡ/g, 'g');
       const issue = wordIssues.find(i => sound && normalizeSound(i.expected) === normalizeSound(sound));
       // Confirmed difficulty must not be hidden by a higher aggregate GB score.
       const score = issue && Number.isFinite(issue.accuracyScore) ? Math.min(phoneme.accuracyScore, issue.accuracyScore) : phoneme.accuracyScore;
       const result = childPartBand(isSubstitution(issue) ? 0 : score);
-      return `<li class="pronunciation-sound ${result.style}"><b>${esc(label)}</b><span>${result.text}</span></li>`;
+      return `<li class="pronunciation-sound ${result.style}"><b>${esc(label)}</b><small>${esc(childSoundDescription(sound, position))}</small><span>${result.text}</span></li>`;
     }).join('');
-    return `<div class="pronunciation-word"><div class="pronunciation-word-title"><b>${esc(word.word)}</b><span class="${band.style}">${band.text}</span></div>${recognition}${sounds ? `<ul class="pronunciation-sounds" aria-label="Zvuky ve slově ${esc(word.word)}">${sounds}</ul>` : ''}</div>`;
+    return `<div class="pronunciation-word"><div class="pronunciation-word-title"><b>${esc(word.word)}</b><span class="${band.style}"><small>Výslovnost celého slova</small>${band.text}</span></div>${recognition}${sounds ? `<div class="pronunciation-sounds-heading">Jak zněly jednotlivé hlásky?</div><ul class="pronunciation-sounds" aria-label="Zvuky ve slově ${esc(word.word)}">${sounds}</ul>` : ''}</div>`;
   }).join('');
-  return rows ? `<div class="pronunciation-parts"><b>${data.feedback?.needsPractice === false ? 'Co se povedlo' : 'Co se povedlo a co ještě zkusit'}</b>${rows}</div>` : '';
+  return rows ? `<div class="pronunciation-parts"><b>${data.feedback?.needsPractice === false ? 'Co se povedlo' : 'Co se povedlo a co ještě zkusit'}</b><p class="pronunciation-guide">Porovnávám s britským vzorem. Kartičky ukazují hlásky, ne písmena. Jedna hláska může být napsaná více písmeny, třeba TH.</p>${rows}</div>` : '';
 }
 
 if (typeof module !== 'undefined') module.exports = { encodeAssessmentWav, phoneticProgressScore };

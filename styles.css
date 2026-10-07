@@ -398,3 +398,9 @@ button,input{font:inherit}.topbar{position:sticky;top:0;z-index:10;display:flex;
 .pronunciation-sound.growing{background:#fff7d7;border-color:#e1ca75}
 .pronunciation-sound.practice{background:#fff0e4;border-color:#edbf96}
 .voice-game-result .pronunciation-parts{max-width:520px;margin:12px auto 0}
+
+.pronunciation-guide{font-size:14px;line-height:1.45;margin:0;color:#554c45}
+.pronunciation-sounds-heading{font-size:14px;font-weight:700;margin-top:12px}
+.pronunciation-sound small{font-size:12px;line-height:1.35;color:#554c45}
+.pronunciation-word-title>span{display:grid;gap:3px;font-size:14px}
+.pronunciation-word-title>span small{font-size:12px;color:#554c45}
