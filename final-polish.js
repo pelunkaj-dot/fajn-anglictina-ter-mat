@@ -44,56 +44,53 @@ recordPronunciation = async function(expected){
   const btn=document.getElementById("record");
   const out=document.getElementById("pronResult");
   try{
-    const stream=await navigator.mediaDevices.getUserMedia({audio:true});
-    const localChunks=[];
-    const recorder=new MediaRecorder(stream);
-    recorder.ondataavailable=e=>{if(e.data.size)localChunks.push(e.data);};
-    recorder.onstop=async()=>{
-      stream.getTracks().forEach(t=>t.stop());
-      const blob=new Blob(localChunks,{type:"audio/webm"});
-      const fd=new FormData();
-      fd.append("audio",blob,"audio.webm");
-      fd.append("expectedText",expected);
-      fd.append("language","en-GB");
-      out.innerHTML='<div class="kid-feedback listening">👂 Poslouchám…</div>';
-      try{
-        const res=await fetch(API_PRON,{method:"POST",body:fd});
-        const data=await res.json();
-        if(!res.ok) throw new Error(data.error||"Chyba");
-        const score=Number(data.score)||0;
-        const ts=topicState(currentTopic.id);
-        ts.bestPronunciation=Math.max(ts.bestPronunciation||0,score);
-        saveState();
-        let message="";
-        if(score>=80){ kidSound("success"); message='<div class="kid-feedback great"><div class="feedback-face">🌟</div><strong>Výborně!</strong><span>Bylo ti krásně rozumět.</span></div>';
-        } else if(score>=60){ kidSound("success"); message='<div class="kid-feedback good"><div class="feedback-face">🙂</div><strong>Dobře!</strong><span>Ještě jednou a bude to jistější.</span></div>';
-        } else { kidSound("try"); message='<div class="kid-feedback try"><div class="feedback-face">👂</div><strong>Poslechni ještě jednou.</strong><span>A pak větu zopakuj.</span></div>';
-        } out.innerHTML=message+`<div class="controls"><button class="btn speak" id="hearSentenceAgain">🔊 Poslechnout</button><button class="btn good" id="saySentenceAgain">🎙️ Znovu</button><button class="btn primary" id="continueSentence">${currentIndex===currentTopic.sentences.length-1?"Pokračovat":"Další věta"} →</button></div>`;
-        document.getElementById("hearSentenceAgain").onclick=()=>speak(expected);
-        document.getElementById("saySentenceAgain").onclick=()=>renderSpeak();
-        document.getElementById("continueSentence").onclick=()=>{
-          if(currentIndex<currentTopic.sentences.length-1){currentIndex++;renderSpeak();}else nextStage();
-        };
-        if(score<60) speak(expected);
-      }catch(err){
-        out.innerHTML='<div class="kid-feedback try">🎙️ Teď se mi nepodařilo hlas zkontrolovat.<div class="controls"><button class="btn" id="skipPron">Pokračovat →</button></div></div>';
-        const skip=document.getElementById("skipPron");
-        if(skip) skip.onclick=()=>{if(currentIndex<currentTopic.sentences.length-1){currentIndex++;renderSpeak();}else nextStage();};
-      }finally{
-        btn.disabled=false;
-        btn.innerHTML='<span class="action-icon">🎙️</span><span>Řeknu to</span>';
-      }
+    const blob=await captureChildSpeech({button:btn,out,maxMs:6200,minMs:700,silenceMs:850});
+    const fd=new FormData();
+    fd.append("audio",blob,"audio.webm");
+    fd.append("expectedText",expected);
+    fd.append("language","en-GB");
+
+    const res=await fetch(API_PRON,{method:"POST",body:fd});
+    const data=await res.json();
+    if(!res.ok) throw new Error(data.error||"Chyba");
+
+    const score=Number(data.score)||0;
+    const ts=topicState(currentTopic.id);
+    ts.bestPronunciation=Math.max(ts.bestPronunciation||0,score);
+    saveState();
+
+    let message="";
+    if(score>=80){
+      kidSound("success");
+      message='<div class="kid-feedback great"><div class="feedback-face">🌟</div><strong>Výborně!</strong><span>Bylo ti krásně rozumět.</span></div>';
+    }else if(score>=60){
+      kidSound("success");
+      message='<div class="kid-feedback good"><div class="feedback-face">🙂</div><strong>Dobře!</strong><span>Ještě jednou a bude to jistější.</span></div>';
+    }else{
+      kidSound("try");
+      message='<div class="kid-feedback try"><div class="feedback-face">👂</div><strong>Poslechni ještě jednou.</strong><span>A pak větu zopakuj.</span></div>';
+    }
+
+    out.innerHTML=message+`<div class="controls"><button class="btn speak" id="hearSentenceAgain">🔊 Poslechnout</button><button class="btn good" id="saySentenceAgain">🎙️ Znovu</button><button class="btn primary" id="continueSentence">${currentIndex===currentTopic.sentences.length-1?"Pokračovat":"Další věta"} →</button></div>`;
+    document.getElementById("hearSentenceAgain").onclick=()=>speak(expected);
+    document.getElementById("saySentenceAgain").onclick=()=>renderSpeak();
+    document.getElementById("continueSentence").onclick=()=>{
+      if(currentIndex<currentTopic.sentences.length-1){currentIndex++;renderSpeak();}else nextStage();
     };
-    recorder.start();
-    btn.disabled=true;
-    btn.innerHTML='<span class="action-icon recording-dot">🔴</span><span>Mluv teď</span>';
-    out.innerHTML='<div class="kid-feedback listening">🎙️ Poslouchám tvůj hlas…</div>';
-    const duration=Math.min(5200,Math.max(3000,expected.split(/\s+/).length*650));
-    setTimeout(()=>{if(recorder.state==="recording")recorder.stop();},duration);
+    if(score<60) speak(expected);
   }catch(err){
-    out.innerHTML='<div class="kid-feedback try"><div class="feedback-face">🎙️</div><strong>Mikrofon není dostupný.</strong><span>Můžeš pokračovat a mluvení zkusit později.</span><div class="controls"><button class="btn primary" id="continueNoMic">Pokračovat →</button></div></div>';
-    const next=document.getElementById("continueNoMic");
-    if(next) next.onclick=()=>{if(currentIndex<currentTopic.sentences.length-1){currentIndex++;renderSpeak();}else nextStage();};
+    if(err?.code==="no-speech"){
+      out.innerHTML='<div class="kid-feedback try"><div class="feedback-face">👂</div><strong>Neslyšela jsem tě.</strong><span>Zkus větu ještě jednou.</span><div class="controls"><button class="btn good" id="saySentenceAgain">🎙️ Zkusím znovu</button></div></div>';
+      const again=document.getElementById("saySentenceAgain");
+      if(again) again.onclick=()=>renderSpeak();
+    }else{
+      out.innerHTML='<div class="kid-feedback try"><div class="feedback-face">🎙️</div><strong>Mikrofon není dostupný.</strong><span>Můžeš pokračovat a mluvení zkusit později.</span><div class="controls"><button class="btn primary" id="continueNoMic">Pokračovat →</button></div></div>';
+      const next=document.getElementById("continueNoMic");
+      if(next) next.onclick=()=>{if(currentIndex<currentTopic.sentences.length-1){currentIndex++;renderSpeak();}else nextStage();};
+    }
+  }finally{
+    btn.disabled=false;
+    btn.innerHTML='<span class="action-icon">🎙️</span><span>Řeknu to</span>';
   }
 };
 
