@@ -23,7 +23,7 @@ buildGameQuestions = function(topic){
       qs.push({type:"picturePick",word:w,prompt:"Najdi správný obrázek",answer:w.cz,options:opts,speak:w.en});
     }else if(mode===1){
       const opts=[w,...shuffle(topic.words.filter(x=>x!==w)).slice(0,3)]; shuffle(opts);
-      qs.push({type:"listen",word:w,prompt:"Co jsi slyšel/a?",answer:w.en,options:opts.map(x=>x.en),speak:w.en});
+      qs.push({type:"listen",word:w,prompt:"Co slyšíš?",answer:w.en,options:opts.map(x=>x.en),speak:w.en});
     }else if(mode===2){
       const opts=[w,...shuffle(topic.words.filter(x=>x!==w)).slice(0,3)]; shuffle(opts);
       qs.push({type:"reverse",word:w,prompt:`Jak je anglicky „${w.cz}“?`,answer:w.en,options:opts.map(x=>x.en)});
@@ -137,7 +137,7 @@ async function recordGameWord(q){
           const gain=score>=80?3:2;
           game.score+=gain;
           kidSound(score>=80?"reward":"success");
-          out.innerHTML=`<div class="voice-game-result goodvoice"><div>🌟</div><strong>${score>=80?"Paráda!":"Dobré!"}</strong><span>Brána se otevřela.</span></div>`;
+          out.innerHTML=`<div class="voice-game-result goodvoice"><div>🌟</div><strong>${score>=80?"Paráda!":"Dobře!"}</strong><span>Brána se otevřela.</span></div>`;
           setTimeout(()=>{game.round++;renderAdventure();},900);
         }else{
           game.combo=0;
