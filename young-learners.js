@@ -35,10 +35,16 @@ renderLearn = function(){
         <button class="big-action say-action" id="sayWord"><span class="action-icon">🎙️</span><span>Řekni to</span></button>
       </div>
       <div id="wordPronResult">${best >= 80 ? '<div class="kid-feedback great">🌟 Tohle už umíš krásně!</div>' : best >= 60 ? '<div class="kid-feedback good">🙂 Už to jde!</div>' : ''}</div>
-      <div class="controls young-next"><button class="btn primary" id="nextWord">${currentIndex===currentTopic.words.length-1 ? "Mám všechna slova" : "Další slovo"} →</button></div>
+      <div class="controls young-next">
+        <button class="btn" id="previousWord" ${currentIndex===0 ? 'disabled' : ''}>← Předchozí slovo</button>
+        <button class="btn primary" id="nextWord">${currentIndex===currentTopic.words.length-1 ? "Mám všechna slova" : "Další slovo"} →</button>
+      </div>
     </div>`);
   document.getElementById("listen").onclick = ()=>speak(w.en);
   document.getElementById("sayWord").onclick = ()=>recordYoungWord(w.en);
+  document.getElementById("previousWord").onclick = ()=>{
+    if(currentIndex > 0){ currentIndex--; renderLearn(); }
+  };
   document.getElementById("nextWord").onclick = ()=>{
     if(currentIndex < currentTopic.words.length-1){ currentIndex++; renderLearn(); } else nextStage();
   };
@@ -47,6 +53,10 @@ renderLearn = function(){
 async function recordYoungWord(expected){
   const btn=document.getElementById("sayWord");
   const out=document.getElementById("wordPronResult");
+  const previous=document.getElementById("previousWord");
+  const next=document.getElementById("nextWord");
+  if(previous) previous.disabled=true;
+  if(next) next.disabled=true;
   try{
     const blob=await captureChildSpeech({button:btn,out,maxMs:3200,minMs:350,silenceMs:650});
     const data=await assessChildSpeech(blob, expected);
@@ -74,6 +84,8 @@ async function recordYoungWord(expected){
       out.innerHTML='<div class="kid-feedback try">🎙️ Teď se mi nepodařilo hlas zkontrolovat. Zkus to ještě jednou.</div>';
     }
   }finally{
+    if(previous) previous.disabled=currentIndex===0;
+    if(next) next.disabled=false;
     btn.disabled=false;
     btn.innerHTML='<span class="action-icon">🎙️</span><span>Řekni to</span>';
   }

@@ -101,8 +101,17 @@ function shell(body){
       </div>
     </div>
     ${pathHtml()}
+    ${currentStage===1 ? '<div class="controls"><button class="btn" id="backToWords">← Zpět ke slovům</button></div>' : ''}
     <section class="panel">${body}</section>`;
   document.getElementById("backHome").addEventListener("click",renderHome);
+  const backToWords=document.getElementById("backToWords");
+  if(backToWords) backToWords.onclick=()=>{
+    // Do not interrupt an answer that is already advancing after its feedback.
+    if(document.getElementById("feedback")?.classList.contains("ok")) return;
+    currentStage=0;
+    currentIndex=currentTopic.words.length-1;
+    renderStage();
+  };
   refreshStats();
 }
 function renderStage(){
