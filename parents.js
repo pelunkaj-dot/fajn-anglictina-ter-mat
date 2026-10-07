@@ -43,7 +43,7 @@ function pinForm(title,text,mode){
     e.preventDefault();
     const p1=document.getElementById("parentPin").value.trim();
     const fb=document.getElementById("pinFeedback");
-    if(!/^\d{4}$/.test(p1)){fb.textContent="PIN musí mít 4 číslice.";return;}
+    if(!/^\d{4}$/.test(p1)){fb.textContent="PIN musí mít čtyři číslice.";return;}
     if(mode==="create"){
       const p2=document.getElementById("parentPin2").value.trim();
       if(p1!==p2){fb.textContent="PINy se neshodují.";return;}
@@ -94,11 +94,11 @@ function renderParentDashboard(){
       <div class="parent-summary">
         <span><b>${mastered}</b><small>zvládnutých témat</small></span>
         <span><b>${completed}</b><small>dokončených témat</small></span>
-        <span><b>${attempted}</b><small>rozpracovaných témat</small></span>
+        <span><b>${attempted}</b><small>vyzkoušených témat</small></span>
         <span><b>${games.best||0}</b><small>herní rekord</small></span>
       </div>
     </div>
-    <div class="parent-note">🎙️ Hodnocení hlasu znamená, jak dobře systém rozpoznal vyslovené slovo nebo větu. Není to odborná fonetická známka.</div>
+    <div class="parent-note">🎙️ Hodnocení mluvení ukazuje, jak dobře systém rozpoznal vyslovené slovo nebo větu. Není to odborná fonetická známka.</div>
     <div class="parent-table-wrap"><table class="parent-table"><thead><tr><th>Téma</th><th>Kroky</th><th>Stav</th><th>Mluvení</th></tr></thead><tbody>${rows}</tbody></table></div>
     <div class="parent-actions">
       <button class="btn" id="changePin">🔐 Změnit PIN</button>
