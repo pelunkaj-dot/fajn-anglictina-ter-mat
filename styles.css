@@ -383,3 +383,18 @@ button,input{font:inherit}.topbar{position:sticky;top:0;z-index:10;display:flex;
 .voice-level{width:min(300px,80%);height:12px;border-radius:999px;background:#ffffffaa;overflow:hidden;margin-top:8px;border:1px solid #e3b0b0}
 .voice-level i{display:block;height:100%;width:3%;background:#e45555;border-radius:999px;transition:width .08s linear}
 @keyframes micPulse{to{transform:scale(1.15)}}
+
+/* Child-readable partial pronunciation feedback, without technical scores. */
+.pronunciation-parts{width:100%;margin-top:12px;text-align:left;display:grid;gap:10px}
+.pronunciation-word{background:#fff;border:1px solid #d8d8d8;border-radius:14px;padding:12px}
+.pronunciation-word-title{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.pronunciation-word-title b{font-size:20px}
+.pronunciation-content{font-size:14px;margin-top:4px;color:#554c45}
+.pronunciation-sounds{list-style:none;padding:0;margin:10px 0 0;display:flex;gap:7px;flex-wrap:wrap}
+.pronunciation-sound{display:grid;gap:3px;text-align:center;border-radius:12px;padding:8px 10px;border:1px solid transparent;flex:1 1 82px}
+.pronunciation-sound b{font-size:19px}
+.pronunciation-sound span{font-size:13px;color:#3d3935}
+.pronunciation-sound.clear{background:#eef9d9;border-color:#b9df72}
+.pronunciation-sound.growing{background:#fff7d7;border-color:#e1ca75}
+.pronunciation-sound.practice{background:#fff0e4;border-color:#edbf96}
+.voice-game-result .pronunciation-parts{max-width:520px;margin:12px auto 0}

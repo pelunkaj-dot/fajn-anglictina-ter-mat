@@ -51,3 +51,19 @@ test('All active speaking paths use the shared assessment and feedback', () => {
     assert.doesNotMatch(s, /Number\(data.score\)/);
   }
 });
+
+test('Mixed frog result shows each sound and three progress bands without percentages', () => {
+  const h = helper();
+  const html = h.childPronunciationHtml({words:[{word:'frog',ok:true}], pronunciation:{status:'assessed',words:[{word:'frog',accuracyScore:82,phonemes:[100,72,93,91].map(accuracyScore=>({accuracyScore}))}],issues:[{word:'frog',expected:'g',accuracyScore:54}]},feedback:{level:'retry',passed:false,title:'Poslechni si vzor znovu.',tip:'Zkus G s hlasem.'}});
+  assert.match(html, /✓ Správné slovo/);
+  assert.match(html, /<b>F<\/b><span>🌟 Povedlo se/);
+  assert.match(html, /<b>R<\/b><span>🙂 Už to jde/);
+  assert.match(html, /<b>G<\/b><span>👂 Zkus ještě/);
+  assert.doesNotMatch(html, /82|100|72|93|91|54|%/);
+});
+test('Unknown or differently sized phoneme sequences are not assigned guessed letters', () => {
+  const h = helper();
+  const html = h.childPronunciationParts({pronunciation:{status:'assessed',words:[{word:'frog',accuracyScore:70,phonemes:[{accuracyScore:60}]}]}});
+  assert.match(html, /1\. zvuk/); assert.doesNotMatch(html, /<b>F<\/b>/);
+  assert.equal(h.childPronunciationParts({pronunciation:{status:'unavailable',words:[{word:'frog',accuracyScore:100}]}}), '');
+});

@@ -67,7 +67,54 @@ function childPronunciationHtml(data, game = false) {
   const f = data.feedback;
   const face = f.level === 'great' ? '🌟' : f.level === 'good' || f.level === 'content-only' ? '🙂' : '👂';
   const style = game ? `voice-game-result ${f.passed ? 'goodvoice' : 'tryvoice'}` : `kid-feedback ${f.level === 'great' ? 'great' : f.level === 'good' ? 'good' : 'try'}`;
-  return `<div class="${style}"><div class="${game ? '' : 'feedback-face'}">${face}</div><strong>${esc(f.title)}</strong><span>${esc(f.tip)}</span></div>`;
+  return `<div class="${style}"><div class="${game ? '' : 'feedback-face'}">${face}</div><strong>${esc(f.title)}</strong><span>${esc(f.tip)}</span>${childPronunciationParts(data)}</div>`;
+}
+
+// British responses include phoneme scores but no names. Label only known,
+// unambiguous reference sequences when their lengths match the response.
+const childReferenceSounds = {
+  frog: ['f', 'r', 'ɒ', 'g'], red: ['r', 'ɛ', 'd'],
+  rabbit: ['r', 'æ', 'b', 'ɪ', 't'], dog: ['d', 'ɒ', 'g'],
+  three: ['θ', 'r', 'i'], think: ['θ', 'ɪ', 'ŋ', 'k'],
+  this: ['ð', 'ɪ', 's'], water: ['w', 'ɔ', 't', 'ə'],
+};
+function childSoundLabel(sound) {
+  const labels = { 'ɹ': 'R', r: 'R', 'θ': 'TH', 'ð': 'TH',
+    'ɒ': 'O', 'ɔ': 'O', 'ɑ': 'A', 'æ': 'A', 'ɛ': 'E',
+    'ɪ': 'I', i: 'Í', 'iː': 'Í', 'ə': 'krátký koncový zvuk', 'ŋ': 'NG', 'ɡ': 'G' };
+  return labels[sound] || (/^[a-z]$/.test(sound || '') ? sound.toUpperCase() : null);
+}
+function childPartBand(score) {
+  return score >= 80 ? { style: 'clear', text: '🌟 Povedlo se' }
+    : score >= 65 ? { style: 'growing', text: '🙂 Už to jde' }
+    : { style: 'practice', text: '👂 Zkus ještě' };
+}
+function childPronunciationParts(data) {
+  const p = data.pronunciation;
+  if (p?.status !== 'assessed') return '';
+  const rows = (p.words || []).map((word, index) => {
+    const key = String(word.word || '').toLowerCase();
+    const reference = childReferenceSounds[key];
+    const phonemes = word.phonemes || [];
+    const issueScores = (p.issues || []).filter(i => String(i.word).toLowerCase() === key && Number.isFinite(i.accuracyScore)).map(i => i.accuracyScore);
+    const band = childPartBand(Math.min(word.accuracyScore, ...phonemes.map(s => s.accuracyScore).filter(Number.isFinite), ...issueScores));
+    const content = data.words?.[index];
+    const recognition = content && String(content.word).toLowerCase() === key
+      ? `<div class="pronunciation-content">${content.ok ? '✓ Správné slovo' : '👂 Zkus vyslovit toto slovo'}</div>` : '';
+    const sounds = phonemes.map((phoneme, position) => {
+      if (!Number.isFinite(phoneme.accuracyScore)) return '';
+      const sound = phoneme.phoneme || (reference?.length === phonemes.length ? reference[position] : null);
+      const label = childSoundLabel(sound) || `${position + 1}. zvuk`;
+      const normalizeSound = s => String(s || '').replace(/ɹ/g, 'r').replace(/ɡ/g, 'g');
+      const issue = (p.issues || []).find(i => String(i.word).toLowerCase() === key && sound && normalizeSound(i.expected) === normalizeSound(sound));
+      // Confirmed difficulty must not be hidden by a higher aggregate GB score.
+      const score = issue && Number.isFinite(issue.accuracyScore) ? Math.min(phoneme.accuracyScore, issue.accuracyScore) : phoneme.accuracyScore;
+      const result = childPartBand(score);
+      return `<li class="pronunciation-sound ${result.style}"><b>${esc(label)}</b><span>${result.text}</span></li>`;
+    }).join('');
+    return `<div class="pronunciation-word"><div class="pronunciation-word-title"><b>${esc(word.word)}</b><span class="${band.style}">${band.text}</span></div>${recognition}${sounds ? `<ul class="pronunciation-sounds" aria-label="Zvuky ve slově ${esc(word.word)}">${sounds}</ul>` : ''}</div>`;
+  }).join('');
+  return rows ? `<div class="pronunciation-parts"><b>Co se povedlo a co ještě zkusit</b>${rows}</div>` : '';
 }
 
 if (typeof module !== 'undefined') module.exports = { encodeAssessmentWav, phoneticProgressScore };
